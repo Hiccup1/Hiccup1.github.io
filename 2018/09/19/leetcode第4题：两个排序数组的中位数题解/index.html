@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Category: 技术 | Hiccup</title>
+  <title itemprop="name">leetcode第4题：两个排序数组的中位数题解 | Hiccup</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -295,633 +295,242 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img data-src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/banner/coding.jpg" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://i.loli.net/2018/09/19/5ba260f702a50.jpeg);" src="" data-src="https://i.loli.net/2018/09/19/5ba260f702a50.jpeg">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      leetcode第4题：两个排序数组的中位数题解</h1>
+      <p class="entry-census">
+        <span>
+          <a href="xdong.me">
+            <img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="xdong.me">Hiccup</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2018-9-19<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">技术改变我</h1>
-    <span class="cat-des">
-      <p>code</p>
-    </span>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>做到第四题，感觉好难，复杂度O(log(m+n))不好做，觉得该二分，做了一个小时放弃了，感觉没大一大二那种一直做下去，几个小时都不放弃的精力了，也可能是天气太热…..索性看了看官方的题解，顿时感觉茅塞顿开，我就把那题解放到这来吧。<a href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/#" target="_blank" rel="noopener">原文链接</a></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>为了解决这个问题，我们需要理解“中位数的作用是什么”。在统计中，中位数被用来：</p>
+<blockquote>
+<p>将一个集合划分为两个长度相等的子集，其中一个子集中的元素总是大于另一个子集中的元素。</p>
+</blockquote>
+<p>如果理解了中位数的划分作用，我们就很接近答案了。</p>
+<p>首先，让我们在任一位置  将 A 划分成两个部分：</p>
+<pre><code>       left_A                |        right_A
+    A[0], A[1], ..., A[i-1]  |  A[i], A[i+1], ..., A[m-1]
+
+</code></pre><p>由于 A 中有 m 个元素， 所以我们有 m+1 种划分的方法（i=0∼m）。</p>
+<p>我们知道：</p>
+<blockquote>
+<p>len(left_A)=i,len(right_A)=m−i.</p>
+</blockquote>
+<blockquote>
+<p>注意：当 i=0 时，left_A 为空集， 而当 i=m 时, right_A 为空集。</p>
+</blockquote>
+<p>采用同样的方式，我们在任一位置 j 将 B 划分成两个部分：</p>
+<pre><code>      left_B                 |        right_B
+    B[0], B[1], ..., B[j-1]  |  B[j], B[j+1], ..., B[n-1]
+
+</code></pre><p>将 left_A 和 left_B 放入一个集合，并将 rright_A 和 right_B 放入另一个集合。 再把这两个新的集合分别命名为 left_part 和 right_part：</p>
+<pre><code>          left_part          |        right_part
+    A[0], A[1], ..., A[i-1]  |  A[i], A[i+1], ..., A[m-1]
+    B[0], B[1], ..., B[j-1]  |  B[j], B[j+1], ..., B[n-1]
+</code></pre><p>如果我们可以确认：</p>
+<blockquote>
+<p>1.len(left_part)=len(right_part)<br>2.max⁡(left_part)≤min⁡(right_part)</p>
+</blockquote>
+<p>那么，我们已经将 {A,B} 中的所有元素划分为相同长度的两个部分，且其中一部分中的元素总是大于另一部分中的元素。那么：</p>
+<p>median=max(left_part)+min(right_part)​ / 2</p>
+<p>要确保这两个条件，我们只需要保证：</p>
+<blockquote>
+<p>1.i+j=m−i+n−j（或：m−i+n−j+1） 如果 n≥m，只需要使  i=0∼m, j=(m+n+1)/2−i<br>2.B[j−1]≤A[i] 以及 A[i−1]≤B[j]</p>
+</blockquote>
+<p>ps.1 为了简化分析，我假设 A[i−1],B[j−1],A[i],B[j]总是存在，哪怕出现 i=0，i=m，j=0，或是 j=n 这样的临界条件。 我将在最后讨论如何处理这些临界值。</p>
+<p>ps.2 为什么 n≥m？由于0≤i≤m且 j=(m+n+1)/2−i，我必须确保 j 不是负数。如果 n&lt;m，那么 j 将可能是负数，而这会造成错误的答案。</p>
+<p>所以，我们需要做的是：</p>
+<blockquote>
+<p>在 [0，m] 中搜索并找到目标对象 i，以使：<br>B[j−1]≤A[i] 且  A[i−1]≤B[j],其中 j=(m+n+1)/2−i</p>
+</blockquote>
+<p>接着，我们可以按照以下步骤来进行二叉树搜索：</p>
+<p>设 imin=0，imax=m, 然后开始在 [imin,imax] 中进行搜索。<br>令 i=(imin+imax)/2​， j=(m+n+1)/2−i</p>
+<p>现在我们有 len(left_part)=len(right_part)。 而且我们只会遇到三种情况：</p>
+<p>B[j−1]≤A[i] 且 A[i−1]≤B[j]：<br>这意味着我们找到了目标对象 i，所以可以停止搜索。</p>
+<p>B[j−1]&gt;A[i]：<br>这意味着 A[i] 太小，我们必须调整 i 以使 B[j−1]≤A[i]。<br>我们可以增大 i 吗？<br>是的，因为当 i 被增大的时候，j 就会被减小。<br>因此 B[j−1] 会减小，而 A[i] 会增大，那么 B[j−1]≤A[i] 就可能被满足。<br>我们可以减小 i 吗？<br>不行，因为当 i 被减小的时候，j 就会被增大。<br>因此 B[j−1] 会增大，而 A[i] 会减小，那么 B[j−1]≤A[i] 就可能不满足。<br>所以我们必须增大 i。也就是说，我们必须将搜索范围调整为 [i+1,imax]。 因此，设imin=i+1并转到步骤 2。</p>
+<p>A[i−1]&gt;B[j]： 这意味着 A[i−1] 太大，我们必须减小 i 以使 A[i−1]≤B[j]。 也就是说，我们必须将搜索范围调整为 [imin,i−1]。<br>因此，设 imax=i−1，并转到步骤 2。</p>
+<p>当找到目标对象 i 时，中位数为：</p>
+<blockquote>
+<p>max(A[i−1],B[j−1]),  当 m+n 为奇数时</p>
+</blockquote>
+<blockquote>
+<p>max⁡(A[i−1],B[j−1])+min⁡(A[i],B[j])/2, ​,  当 m+n为偶数时</p>
+</blockquote>
+<p>现在，让我们来考虑这些临界值 i=0,i=m,j=0,j=n，此时 A[i−1],B[j−1],A[i],B[j] 可能不存在。 其实这种情况比你想象的要容易得多。</p>
+<p>我们需要做的是确保 max(left_part)≤min(right_part)。 因此，如果 i 和 j 不是临界值（这意味着 A[i−1],B[j−1],A[i],B[j]全部存在）, 那么我们必须同时检查 B[j−1]≤A[i] 以及 A[i−1]≤B[j] 是否成立。 但是如果 A[i−1],B[j−1],A[i],B[j] 中部分不存在，那么我们只需要检查这两个条件中的一个（或不需要检查）。 举个例子，如果 i=0，那么 A[i−1]不存在，我们就不需要检查 A[i−1]≤B[j] 是否成立。 所以，我们需要做的是：</p>
+<blockquote>
+<p>在 [0，m] 中搜索并找到目标对象 i，以使：<br>(j=0 or i=m or B[j−1]≤A[i]) 或是 (i=0 or j=n or A[i−1]≤B[j]), 其中 j=(m+n+1)/2−i</p>
+</blockquote>
+<p>在循环搜索中，我们只会遇到三种情况：</p>
+<blockquote>
+<p>(j=0 or i=m or B[j−1]≤A[i])) 或是(i=0 or j=n or A[i−1]≤B[j])这意味着 i 是完美的，我们可以停止搜索。<br>j&gt;0 and i&lt;m and B[j−1]&gt;A[i]这意味着 i 太小，我们必须增大它。<br>i&gt;0 and j&lt;n and A[i−1]&gt;B[j]这意味着 i 太大，我们必须减小它。</p>
+</blockquote>
+<pre><code>class Solution {
+    public double findMedianSortedArrays(int[] A, int[] B) {
+        int m = A.length;
+        int n = B.length;
+        if (m &gt; n) { // to ensure m&lt;=n
+            int[] temp = A; A = B; B = temp;
+            int tmp = m; m = n; n = tmp;
+        }
+        int iMin = 0, iMax = m, halfLen = (m + n + 1) / 2;
+        while (iMin &lt;= iMax) {
+            int i = (iMin + iMax) / 2;
+            int j = halfLen - i;
+            if (i &lt; iMax &amp;&amp; B[j-1] &gt; A[i]){
+                iMin = i + 1; // i is too small
+            }
+            else if (i &gt; iMin &amp;&amp; A[i-1] &gt; B[j]) {
+                iMax = i - 1; // i is too big
+            }
+            else { // i is perfect
+                int maxLeft = 0;
+                if (i == 0) { maxLeft = B[j-1]; }
+                else if (j == 0) { maxLeft = A[i-1]; }
+                else { maxLeft = Math.max(A[i-1], B[j-1]); }
+                if ( (m + n) % 2 == 1 ) { return maxLeft; }
+
+                int minRight = 0;
+                if (i == m) { minRight = B[j]; }
+                else if (j == n) { minRight = A[i]; }
+                else { minRight = Math.min(B[j], A[i]); }
+
+                return (maxLeft + minRight) / 2.0;
+            }
+        }
+        return 0.0;
+    }
+}
+</code></pre><p>复杂度分析</p>
+<p>时间复杂度：O(log⁡(min(m,n)))，<br>首先，查找的区间是 [0,m]。 而该区间的长度在每次循环之后都会减少为原来的一半。 所以，我们只需要执行 log⁡(m) 次循环。由于我们在每次循环中进行常量次数的操作，所以时间复杂度为 O(log⁡(m))。 由于 m≤n，所以时间复杂度是 O(log⁡(min(m,n)))。</p>
+<p>空间复杂度：O(1)， 我们只需要恒定的内存来存储 9 个局部变量， 所以空间复杂度为 O(1)。</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/WeChanQR.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="" data-src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                bootstrapTable的生成、动态列、样式渲染</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2018/09/18/排序算法总结/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="" data-src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                排序算法总结</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-    bootstrapTable的生成、动态列、样式渲染</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-8-23</div>
-    <p>
-    bootstrapTable的生成、动态列、样式渲染</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba260f702a50.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-    leetcode第4题：两个排序数组的中位数题解</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-19</div>
-    <p>
-    leetcode第4题：两个排序数组的中位数题解</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/18/排序算法总结/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/18/排序算法总结/">
-    排序算法总结</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-18</div>
-    <p>
-    排序算法总结</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/18/排序算法总结/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/30/简单点餐app的实现/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/30/简单点餐app的实现/">
-    简单点餐app的实现</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-30</div>
-    <p>
-    简单点餐app的实现</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/30/简单点餐app的实现/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/09/随笔：递归的妙用-1/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2017/12/09/5a2becf52256a.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/09/随笔：递归的妙用-1/">
-    随笔：递归的妙用&lt;1&gt;</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-9</div>
-    <p>
-    随笔：递归的妙用&lt;1&gt;</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/09/随笔：递归的妙用-1/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/11/21/JAVA实现微信支付/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/11/21/JAVA实现微信支付/">
-    JAVA实现微信支付</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-11-21</div>
-    <p>
-    JAVA实现微信支付</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/11/21/JAVA实现微信支付/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-    微信公众号带参二维码的生成与解析（java)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-10-2</div>
-    <p>
-    微信公众号带参二维码的生成与解析（java)</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/09/09/hexo+github搭建自己的博客/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/09/09/hexo+github搭建自己的博客/">
-    hexo+github搭建自己博客（绑定域名）</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-9-9</div>
-    <p>
-    hexo+github搭建自己博客（绑定域名）</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/09/09/hexo+github搭建自己的博客/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf18cb5d855.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-    tomcat 打开 startup.bat闪退</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-7-25</div>
-    <p>
-    tomcat 打开 startup.bat闪退</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz",
+        appKey: "KtRzDQXGq2QeUhmTz7VXMwy9",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="xdong.me" class="profile gravatar"><img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg" itemprop="image" alt="Hiccup" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="xdong.me" itemprop="url" rel="author">Hiccup</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>小人物</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
 
-<!-- 
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-    bootstrapTable的生成、动态列、样式渲染</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-8-23</div>
-    <p>
-    bootstrapTable的生成、动态列、样式渲染</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba260f702a50.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-    leetcode第4题：两个排序数组的中位数题解</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-19</div>
-    <p>
-    leetcode第4题：两个排序数组的中位数题解</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/18/排序算法总结/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/18/排序算法总结/">
-    排序算法总结</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-18</div>
-    <p>
-    排序算法总结</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/18/排序算法总结/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/30/简单点餐app的实现/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/30/简单点餐app的实现/">
-    简单点餐app的实现</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-30</div>
-    <p>
-    简单点餐app的实现</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/30/简单点餐app的实现/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/09/随笔：递归的妙用-1/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2017/12/09/5a2becf52256a.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/09/随笔：递归的妙用-1/">
-    随笔：递归的妙用&lt;1&gt;</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-9</div>
-    <p>
-    随笔：递归的妙用&lt;1&gt;</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/09/随笔：递归的妙用-1/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/11/21/JAVA实现微信支付/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/11/21/JAVA实现微信支付/">
-    JAVA实现微信支付</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-11-21</div>
-    <p>
-    JAVA实现微信支付</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/11/21/JAVA实现微信支付/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-    微信公众号带参二维码的生成与解析（java)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-10-2</div>
-    <p>
-    微信公众号带参二维码的生成与解析（java)</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/09/09/hexo+github搭建自己的博客/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/09/09/hexo+github搭建自己的博客/">
-    hexo+github搭建自己博客（绑定域名）</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-9-9</div>
-    <p>
-    hexo+github搭建自己博客（绑定域名）</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/09/09/hexo+github搭建自己的博客/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf18cb5d855.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-    tomcat 打开 startup.bat闪退</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-7-25</div>
-    <p>
-    tomcat 打开 startup.bat闪退</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
 
- -->
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>

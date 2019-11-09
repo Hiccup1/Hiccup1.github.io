@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Category: 技术 | Hiccup</title>
+  <title itemprop="name">tomcat 打开 startup.bat闪退 | Hiccup</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -295,633 +295,145 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img data-src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/banner/coding.jpg" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://i.loli.net/2018/03/31/5abf18cb5d855.png);" src="" data-src="https://i.loli.net/2018/03/31/5abf18cb5d855.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      tomcat 打开 startup.bat闪退</h1>
+      <p class="entry-census">
+        <span>
+          <a href="xdong.me">
+            <img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="xdong.me">Hiccup</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2017-7-25<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
   </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">技术改变我</h1>
-    <span class="cat-des">
-      <p>code</p>
-    </span>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>tomcat安装好之后再bin目录下有startup.bat,双击之后闪退，这一般是由于环境变量设置问题</p>
+<p>可以在cmd里查看相关信息，win+r 输入cmd，之后cd到tomcat安装目录的bin目录下，然后输入startup.bat如果提示缺少JAVA_HOME 或者缺少JRE_HOME，那么就是环境变量的问题，一般也就是这个错误</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>可以通过设置JAVA_HOME 和 JRE_HOME来解决，需要JDK，这个可以参考教程安装，安装好之后，计算机-&gt;属性-&gt;环境变量，win10是计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b15998.png" alt="环境变量"><br>选择新建系统变量，变量名为JAVA_HOME，变量值为：JDK安装目录\jdk，然后新建JRE_HOME变量，变量值为jdk安装目录下jdk\jre<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b17fdf.png" alt="JAVA"><br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b1927e.png" alt="jre"><br>之后将这两个变量放到path系统变量中，在path变量值的后面直接追加 ;%JAVA_HOME%;%JRE_HOME%<br>这个必须是这个格式，并且;不可少，如图<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b1bd5d.png" alt="path"><br>保存之后就可以启动tomcat</p>
+<blockquote>
+<p>如有错误，欢迎指正</p>
+</blockquote>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏<div class="reward-main">
+              <ul class="reward-row">
+                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/AliPayQR.jpg"></li>
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/WeChanQR.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/2017/09/09/hexo+github搭建自己的博客/" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="" data-src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                hexo+github搭建自己博客（绑定域名）</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/2017/07/24/ACM经历/" rel="next">
+              <div class="background">
+                <img class="lazyload" src="" data-src="https://i.loli.net/2018/03/31/5abf149877764.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2018/03/31/5abf149877764.jpg">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                ACM经历</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-    bootstrapTable的生成、动态列、样式渲染</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-8-23</div>
-    <p>
-    bootstrapTable的生成、动态列、样式渲染</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba260f702a50.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-    leetcode第4题：两个排序数组的中位数题解</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-19</div>
-    <p>
-    leetcode第4题：两个排序数组的中位数题解</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/18/排序算法总结/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/18/排序算法总结/">
-    排序算法总结</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-18</div>
-    <p>
-    排序算法总结</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/18/排序算法总结/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/30/简单点餐app的实现/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/30/简单点餐app的实现/">
-    简单点餐app的实现</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-30</div>
-    <p>
-    简单点餐app的实现</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/30/简单点餐app的实现/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/09/随笔：递归的妙用-1/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2017/12/09/5a2becf52256a.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/09/随笔：递归的妙用-1/">
-    随笔：递归的妙用&lt;1&gt;</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-9</div>
-    <p>
-    随笔：递归的妙用&lt;1&gt;</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/09/随笔：递归的妙用-1/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/11/21/JAVA实现微信支付/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/11/21/JAVA实现微信支付/">
-    JAVA实现微信支付</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-11-21</div>
-    <p>
-    JAVA实现微信支付</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/11/21/JAVA实现微信支付/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-    微信公众号带参二维码的生成与解析（java)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-10-2</div>
-    <p>
-    微信公众号带参二维码的生成与解析（java)</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/09/09/hexo+github搭建自己的博客/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/09/09/hexo+github搭建自己的博客/">
-    hexo+github搭建自己博客（绑定域名）</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-9-9</div>
-    <p>
-    hexo+github搭建自己博客（绑定域名）</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/09/09/hexo+github搭建自己的博客/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf18cb5d855.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-    tomcat 打开 startup.bat闪退</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-7-25</div>
-    <p>
-    tomcat 打开 startup.bat闪退</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz",
+        appKey: "KtRzDQXGq2QeUhmTz7VXMwy9",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <a href="xdong.me" class="profile gravatar"><img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg" itemprop="image" alt="Hiccup" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="xdong.me" itemprop="url" rel="author">Hiccup</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i>小人物</p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
 
-<!-- 
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-    bootstrapTable的生成、动态列、样式渲染</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2019-8-23</div>
-    <p>
-    bootstrapTable的生成、动态列、样式渲染</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2019/08/23/bootstrapTable的生成、动态列、样式渲染/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba260f702a50.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-    leetcode第4题：两个排序数组的中位数题解</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-19</div>
-    <p>
-    leetcode第4题：两个排序数组的中位数题解</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/19/leetcode第4题：两个排序数组的中位数题解/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2018/09/18/排序算法总结/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/09/19/5ba1b9ec887a7.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2018/09/18/排序算法总结/">
-    排序算法总结</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2018-9-18</div>
-    <p>
-    排序算法总结</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2018/09/18/排序算法总结/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/30/简单点餐app的实现/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/30/简单点餐app的实现/">
-    简单点餐app的实现</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-30</div>
-    <p>
-    简单点餐app的实现</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/30/简单点餐app的实现/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/12/09/随笔：递归的妙用-1/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2017/12/09/5a2becf52256a.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/12/09/随笔：递归的妙用-1/">
-    随笔：递归的妙用&lt;1&gt;</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-12-9</div>
-    <p>
-    随笔：递归的妙用&lt;1&gt;</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/12/09/随笔：递归的妙用-1/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/11/21/JAVA实现微信支付/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/11/21/JAVA实现微信支付/">
-    JAVA实现微信支付</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-11-21</div>
-    <p>
-    JAVA实现微信支付</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/11/21/JAVA实现微信支付/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-    微信公众号带参二维码的生成与解析（java)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-10-2</div>
-    <p>
-    微信公众号带参二维码的生成与解析（java)</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/10/02/微信公众号带参二维码的生成与解析/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/09/09/hexo+github搭建自己的博客/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf15c8974e0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/09/09/hexo+github搭建自己的博客/">
-    hexo+github搭建自己博客（绑定域名）</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-9-9</div>
-    <p>
-    hexo+github搭建自己博客（绑定域名）</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/09/09/hexo+github搭建自己的博客/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="https://i.loli.net/2018/03/31/5abf18cb5d855.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-    tomcat 打开 startup.bat闪退</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2017-7-25</div>
-    <p>
-    tomcat 打开 startup.bat闪退</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/2017/07/25/tomcat-打开-startup-bat闪退/">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
 
- -->
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
