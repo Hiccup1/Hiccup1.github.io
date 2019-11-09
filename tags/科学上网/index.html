@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">随笔：递归的妙用&lt;1&gt; | Hiccup</title>
+  <title itemprop="name">Tag: 科学上网 | Hiccup</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -295,197 +295,64 @@
   </div>
 </header>
 
-      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+      
 <div class="pattern-center-blank"></div>
-
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://i.loli.net/2017/12/09/5a2becf52256a.jpg);" src="" data-src="https://i.loli.net/2017/12/09/5a2becf52256a.jpg">
-    </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      随笔：递归的妙用<1></h1>
-      <p class="entry-census">
-        <span>
-          <a href="xdong.me">
-            <img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg">
-          </a>
-        </span>
-        <span>
-          <a href="xdong.me">Hiccup</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2017-12-9<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
+<div class="pattern-center ">
+  <div class="pattern-attachment-img">
+    <img src="" data-src="科学上网.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
   </div>
-
+  <header class="pattern-header ">
+    <h1 class="cat-title">科学上网</h1>
+  </header>
+</div>
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
-        <div class="toc"></div>
-        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
-        
-        <div class="entry-content">
-          <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>昨天闲的蛋疼在百度知道回答问题，看到一个很有趣的题目，要求用递归实现如下的输出</p>
-<blockquote>
-<p>1<br>5 2<br>8 6 3<br>10 9 7 4      </p>
-</blockquote>
-<p>想了一段时间， 自己写了个代码，差不多实现了这功能，却又懒得去优化一下。好久没做算法题目lower_bound的参数都记得不太清楚了，不过还好自己写出来的没错，程序成功运行。</p>
-<h2 id="代码-结果"><a href="#代码-结果" class="headerlink" title="代码+结果"></a>代码+结果</h2><blockquote>
-<p>代码如下                      </p>
-</blockquote>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-#include &lt;string&gt;
-#include &lt;cstdlib&gt;
-#include &lt;set&gt;
-#include &lt;cmath&gt;
-#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-#include &lt;vector&gt;
-#include &lt;map&gt;
-#include &lt;stack&gt;
-#include &lt;queue&gt;
-#include &lt;cctype&gt;
-#define LL long long
-using namespace std;
-const LL inf = 1e18;
-const LL mod = 1e9+7;
-int s[10] = {1, 3, 6, 10, 15, 21, 27};
-int m;
-void f(int n, int k, int cnt) {
-    if(n == 1) {
-        return;
-    }
-    else if(cnt == 0) {
-        cnt = m - k - 1;
-        k = m;
-        f(cnt + 1, k, cnt);
-        printf(&quot;%d\n&quot;, cnt + 1);
-    }else {
-        f(n + k, k - 1, cnt - 1);
-        printf(&quot;%d &quot;, n + k);
-    }
-}
-int main() {
-    //1 3 6 10 15 21 27
-    //1 2 3 4  5  6  7
-    //s = (1 + n) * n / 2
-    int n;
-    while(scanf(&quot;%d&quot;, &amp;n) != EOF) {
-        int k = lower_bound(s, s + 7, n) - s;
-        m = k;
-        f(k + 1, k, k);
-        printf(&quot;%d\n&quot;, k + 1);
-    }
-    return 0;
-}
-</code></pre><blockquote>
-<p>结果如图<br><img src="https://i.loli.net/2017/12/09/5a2becfde7e04.png" alt="结果"></p>
-</blockquote>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>有时间做做这类型的题目也很有意思，锻炼一下思维还是有好处的，这个写的比较烂，如果有更好的方法，不如说出来大家共同探讨一下。</p>
-
-        </div>
-        <!-- .entry-content -->
-        <div class="single-reward">
-          <div class="reward-open">赏<div class="reward-main">
-              <ul class="reward-row">
-                <li class="alipay-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/AliPayQR.jpg"></li>
-                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/Hiccup1/Hiccup1.github.io@v1.1/images/custom/WeChanQR.png"></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
-        <footer class="post-footer">
-          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
-          <div class="post-tags">
-          </div>
-          <div class="post-share">
-            <div class="social-share sharehidden share-component"></div>
-            <i class="iconfont show-share icon-forward"></i>
-          </div>
-        </footer><!-- .entry-footer -->
-      </article>
-      <!-- #post-## -->
-      <div class="toc" style="background: none;"></div>
-      <section class="post-squares nextprev">
-        
-          
-            <div class="post-nepre half previous">
-          
-            <a href="/2017/12/30/简单点餐app的实现/" rel="prev">
-              <div class="background">
-                <img class="lazyload" src="" data-src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2018/03/31/5abf16e9ce5f5.jpg">
-              </div>
-              <span class="label">
-              Previous Post</span>
-              <div class="info">
-                <h3>
-                简单点餐app的实现</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-        
-          
-            <div class="post-nepre half next">
-          
-            <a href="/2017/11/21/JAVA实现微信支付/" rel="next">
-              <div class="background">
-                <img class="lazyload" src="" data-src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://i.loli.net/2018/03/31/5abf17a54612d.jpg">
-              </div>
-              <span class="label">
-              Next Post</span>
-              <div class="info">
-                <h3>
-                JAVA实现微信支付</h3>
-                <hr>
-              </div>
-            </a>
-          </div>
-        
-      </section>
       
-<div id="vcomments"></div>
-<script>
-  window.onload = function(){
-      var valine = new Valine();
-      valine.init({
-        el: '#vcomments',
-        appId: "RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz",
-        appKey: "KtRzDQXGq2QeUhmTz7VXMwy9",
-        path: window.location.pathname,
-        placeholder: "你是我一生只会遇见一次的惊喜 ..."
-      })
-  }
-</script>
-
-      <section class="author-profile">
-        <div class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <a href="xdong.me" class="profile gravatar"><img src="https://i.loli.net/2019/08/25/R6sQnTzyLeJ1oW3.jpg" itemprop="image" alt="Hiccup" height="70" width="70"></a>
-          <div class="meta">
-            <span class="title">Author</span>
-            <h3 itemprop="name">
-            <a href="xdong.me" itemprop="url" rel="author">Hiccup</a>
-            </h3>
-          </div>
+  <!-- 首页默认取最最新文章集 -->
+  
+    <article class="post post-list" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <div class="post-entry">
+    <div class="feature">
+      <a href="/2019/11/10/一些科学上网的建议/">
+        <div class="overlay">
+          <i class="iconfont icon-text">
+          </i>
         </div>
-        <hr>
-        <p><i class="iconfont icon-write"></i>小人物</p>
-      </section>
-    </main><!-- #main -->
-  </div><!-- #primary -->
+        <img width="150" height="150" src="https://i.loli.net/2019/08/23/W4M97lQ5rOGkv61.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
+      </a>
+    </div>
+    <h1 class="entry-title">
+    <a href="/2019/11/10/一些科学上网的建议/">
+    一些科学上网的建议</a>
+    </h1>
+    <div class="p-time">
+      <i class="iconfont icon-time">
+      </i>
+    2019-11-10</div>
+    <p>
+    一些科学上网的建议</p>
+    <footer class="entry-footer">
+      <div class="post-more">
+        <a href="/2019/11/10/一些科学上网的建议/">
+          <i class="iconfont icon-caidan">
+          </i>
+        </a>
+      </div>
+    </footer>
+  </div>
+  <hr>
+</article>
+  
+
+
+      <div class="clearer">
+      </div>
+    </main>
+    <!--  -->
+    
+  </div>
 </div>
-
-
-
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
