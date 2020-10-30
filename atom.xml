@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://xdong.me/"/>
-  <updated>2019-08-26T15:19:31.903Z</updated>
+  <updated>2020-10-30T07:08:38.685Z</updated>
   <id>https://xdong.me/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java中String和byte[]转换长度异常情况</title>
+    <link href="https://xdong.me/2020/06/12/Java%E4%B8%ADString%E5%92%8Cbyte%5B%5D%E8%BD%AC%E6%8D%A2%E9%95%BF%E5%BA%A6%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5/"/>
+    <id>https://xdong.me/2020/06/12/Java中String和byte[]转换长度异常情况/</id>
+    <published>2020-06-11T16:00:00.000Z</published>
+    <updated>2020-10-30T07:08:38.685Z</updated>
+    
+    <summary type="html">
+    
+      Java中String和byte[]转换长度异常情况
+    
+    </summary>
+    
+      <category term="生活" scheme="https://xdong.me/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+      <category term="JAVA" scheme="https://xdong.me/tags/JAVA/"/>
+    
+  </entry>
   
   <entry>
     <title>bootstrapTable的生成、动态列、样式渲染</title>
