@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>微信公众号带参二维码的生成与解析（java)</title>
+<meta name="keywords" content="微信公众号带参二维码的生成与解析（java), Hiccup&#39;s Blog">
+<meta name="description" content="这些日子一直在做微信公众号的开发，从头开始学，觉得特别复杂，接口一堆，开发文档看不懂，各种bug，由于现在二维码的广泛流传，接触了带参二维码，写一下生成与解析
+带参二维码介绍为了满足我们这些用户的需要，公众平台提供了生成带参数二维码的接口。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">微信公众号带参二维码的生成与解析（java)</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2017-10-02</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/JAVA/">
+                  JAVA
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <p>这些日子一直在做微信公众号的开发，从头开始学，觉得特别复杂，接口一堆，开发文档看不懂，各种bug，由于现在二维码的广泛流传，接触了带参二维码，写一下生成与解析</p>
+<h2 id="带参二维码介绍"><a href="#带参二维码介绍" class="headerlink" title="带参二维码介绍"></a>带参二维码介绍</h2><p>为了满足我们这些用户的需要，公众平台提供了生成带参数二维码的接口。使用该接口可以获得多个带不同场景值的二维码，用户扫描后，公众号可以接收到事件推送。说白了就是可以生成带参数的二维码，后台可以根据参数做出不同的反应，然后推送信息给用户，使一些操作简单化。</p>
+<p>目前有2种类型的二维码，分别是临时二维码和永久二维码，前者有过期时间，但能够生成较多数量，后者无过期时间，数量较少（目前参数只支持1–100000），而且参数只能是整数。</p>
+<p>用户扫描带场景值二维码时，可能推送以下两种事件：<br>如果用户还未关注公众号，则用户可以关注公众号，关注后微信会将带场景值关注事件推送给开发者。<br>如果用户已经关注公众号，在用户扫描后会自动进入会话，微信也会将带场景值扫描事件推送给开发者。</p>
+<h2 id="带参二维码的生成"><a href="#带参二维码的生成" class="headerlink" title="带参二维码的生成"></a>带参二维码的生成</h2><p>1.首先创建二维码ticket，然后凭借ticket到指定URL换取二维码<br>2.然后会返回一个链接，打开就是一个二维码</p>
+<p>当然这些前提就是有公众号并且前期的开发配置已完成，服务器域名什么的都配好了，也认证了，或者用的测试号都可以</p>
+<p>创建二维码ticket需要提供一个开发者自行设定的参数（scene_id），这个就是所谓的参数（整数）</p>
+<blockquote>
+<p>http请求URL<br><a target="_blank" rel="noopener" href="https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN">https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN</a></p>
+</blockquote>
+<p>POST数据格式(临时二维码)</p>
+<blockquote>
+<p>{ “expire_seconds”: 1800,”action_name”: “QR_SCENE”,”action_info”: {“scene”: {“scene_id”: 100000}}}</p>
+</blockquote>
+<p>其中expire_seconds就是存在的时间，action_name确定二维码是永久的还是临时的，详细参数的可以看微信开发文档。</p>
+<p>返回格式：（临时二维码)        </p>
+<blockquote>
+<p>{“ticket”:”gQFK8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL3kweXE0T3JscWY3UTltc3ZPMklvAAIEG9jUUgMECAcAAA==”,”expire_seconds”: 1800}</p>
+</blockquote>
+<p>代码:     </p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">JSONObject</span> <span class="variable">tjsonObj</span> <span class="operator">=</span> getTicketJsonObj(<span class="number">6</span>,<span class="number">604800</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">ticketString</span> <span class="operator">=</span> tjsonObj.getString(<span class="string">"ticket"</span>);</span><br><span class="line"><span class="type">int</span> <span class="variable">expire_seconds</span> <span class="operator">=</span> tjsonObj.getInt(<span class="string">"expire_seconds"</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> tjsonObj.getString(<span class="string">"url"</span>);</span><br><span class="line">System.out.println(<span class="string">"ticketString:"</span>+ticketString);</span><br><span class="line">System.out.println(<span class="string">"expire_seconds:"</span>+expire_seconds);</span><br><span class="line">System.out.println(<span class="string">"url:"</span>+url);	</span><br><span class="line"><span class="type">String</span> <span class="variable">qrcodeUrl</span> <span class="operator">=</span> getQrcodeUrl(tjsonObj);</span><br><span class="line">System.out.println(<span class="string">"qrcodeUrl:"</span>+qrcodeUrl);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title function_">getTicketJsonObj</span><span class="params">(<span class="type">int</span> scene_id,<span class="type">int</span> expire_seconds)</span>{</span><br><span class="line">		<span class="type">StringBuffer</span> <span class="variable">ticket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line">		ticket.append(<span class="string">"{\"expire_seconds\":"</span>);</span><br><span class="line">		ticket.append(Integer.toString(expire_seconds));</span><br><span class="line">		ticket.append(<span class="string">",\"action_name\":\"QR_SCENE\","</span>);</span><br><span class="line">		ticket.append(<span class="string">"\"action_info\":{\"scene\":{\"scene_id\":"</span>);</span><br><span class="line">		ticket.append(Integer.toString(scene_id));</span><br><span class="line">		ticket.append(<span class="string">"}}}"</span>);</span><br><span class="line">		<span class="type">AccessTokenDao</span> <span class="variable">atDao</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AccessTokenDao</span>();</span><br><span class="line">		atDao.checkToken();</span><br><span class="line">		<span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> atDao.getAccessTokenBySQL().getToken();</span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> TICKET_URL.replace(<span class="string">"TOKEN"</span>, token);</span><br><span class="line">		<span class="type">String</span> <span class="variable">ticket1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(ticket); </span><br><span class="line">		<span class="keyword">return</span> doPostStr(url, ticket1);</span><br><span class="line">	}</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title function_">doPostStr</span><span class="params">(String url,String outStr)</span>{</span><br><span class="line">		<span class="type">DefaultHttpClient</span> <span class="variable">httpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultHttpClient</span>();</span><br><span class="line">		<span class="type">HttpPost</span> <span class="variable">httpPost</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpPost</span>(url);</span><br><span class="line">		<span class="type">JSONObject</span> <span class="variable">jsonObject</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> {</span><br><span class="line">			httpPost.setEntity(<span class="keyword">new</span> <span class="title class_">StringEntity</span>(outStr, <span class="string">"utf-8"</span>));</span><br><span class="line">			<span class="type">HttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> httpClient.execute(httpPost);</span><br><span class="line">			<span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> EntityUtils.toString(response.getEntity(),<span class="string">"utf-8"</span>);</span><br><span class="line">			jsonObject = JSONObject.fromObject(result);</span><br><span class="line">		} <span class="keyword">catch</span> (UnsupportedEncodingException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		} <span class="keyword">catch</span> (ClientProtocolException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		}</span><br><span class="line">		<span class="keyword">return</span> jsonObject;</span><br><span class="line">	}</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">getQrcodeUrl</span><span class="params">(JSONObject ticketObj)</span>{</span><br><span class="line">		<span class="type">String</span> <span class="variable">ticketString</span> <span class="operator">=</span> ticketObj.getString(<span class="string">"ticket"</span>);</span><br><span class="line">		<span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> {</span><br><span class="line">			url = QRCODE_URL.replace(<span class="string">"TICKET"</span>, URLEncoder.encode(ticketString,<span class="string">"utf-8"</span>));</span><br><span class="line">		} <span class="keyword">catch</span> (UnsupportedEncodingException e) {</span><br><span class="line">			<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		}</span><br><span class="line">		<span class="keyword">return</span> url;</span><br><span class="line">	}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在就得到了url，打开就是二维码的图片</p>
+<h2 id="带参二维码的解析"><a href="#带参二维码的解析" class="headerlink" title="带参二维码的解析"></a>带参二维码的解析</h2><p>微信公众平台推送的消息一般是xml来做的。<br>用户扫描带场景值二维码时，可能推送以下两种事件：<br>如果用户还未关注公众号，则用户可以关注公众号，关注后微信会将带场景值关注事件推送给开发者。<br>如果用户已经关注公众号，则微信会将带场景值扫描事件推送给开发者。     </p>
+<ol>
+<li>用户未关注时，进行关注后的事件推送<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ToUserName</span>&gt;</span>&lt;![CDATA[gh_45072270791c]]&gt;<span class="tag">&lt;/<span class="name">ToUserName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">FromUserName</span>&gt;</span>&lt;![CDATA[o7Lp5t6n59DeX3U0C7Kric9qEx-Q]]&gt;<span class="tag">&lt;/<span class="name">FromUserName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">CreateTime</span>&gt;</span>1389684286<span class="tag">&lt;/<span class="name">CreateTime</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">MsgType</span>&gt;</span>&lt;![CDATA[event]]&gt;<span class="tag">&lt;/<span class="name">MsgType</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Event</span>&gt;</span>&lt;![CDATA[subscribe]]&gt;<span class="tag">&lt;/<span class="name">Event</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">EventKey</span>&gt;</span>&lt;![CDATA[qrscene_1000]]&gt;<span class="tag">&lt;/<span class="name">EventKey</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Ticket</span>&gt;</span>&lt;![CDATA[gQHi8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0UweTNxNi1sdlA3RklyRnNKbUFvAAIELdnUUgMEAAAAAA==]]&gt;<span class="tag">&lt;/<span class="name">Ticket</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+其中EventKey包括参数。     </li>
+<li>用户已关注时的事件推送<figure class="highlight xml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xml</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ToUserName</span>&gt;</span>&lt;![CDATA[gh_45072270791c]]&gt;<span class="tag">&lt;/<span class="name">ToUserName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">FromUserName</span>&gt;</span>&lt;![CDATA[o7Lp5t6n59DeX3U0C7Kric9qEx-Q]]&gt;<span class="tag">&lt;/<span class="name">FromUserName</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">CreateTime</span>&gt;</span>1389684184<span class="tag">&lt;/<span class="name">CreateTime</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">MsgType</span>&gt;</span>&lt;![CDATA[event]]&gt;<span class="tag">&lt;/<span class="name">MsgType</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Event</span>&gt;</span>&lt;![CDATA[SCAN]]&gt;<span class="tag">&lt;/<span class="name">Event</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">EventKey</span>&gt;</span>&lt;![CDATA[1000]]&gt;<span class="tag">&lt;/<span class="name">EventKey</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Ticket</span>&gt;</span>&lt;![CDATA[gQHi8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0UweTNxNi1sdlA3RklyRnNKbUFvAAIELdnUUgMEAAAAAA==]]&gt;<span class="tag">&lt;/<span class="name">Ticket</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xml</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+然后就可以解析这些事件，来做出响应。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="line">			<span class="keyword">throws</span> ServletException, IOException {</span><br><span class="line"></span><br><span class="line">		request.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">		response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="type">PrintWriter</span> <span class="variable">out</span> <span class="operator">=</span> response.getWriter();</span><br><span class="line">		<span class="keyword">try</span> {</span><br><span class="line">			Map&lt;String, String&gt; map = MessageUtil.xmlToMap(request);</span><br><span class="line">			<span class="type">String</span> <span class="variable">toUserName</span> <span class="operator">=</span> map.get(<span class="string">"ToUserName"</span>);</span><br><span class="line">			<span class="type">String</span> <span class="variable">fromUserName</span> <span class="operator">=</span> map.get(<span class="string">"FromUserName"</span>);<span class="comment">// openid</span></span><br><span class="line">			<span class="type">String</span> <span class="variable">msgType</span> <span class="operator">=</span> map.get(<span class="string">"MsgType"</span>);</span><br><span class="line">			<span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> map.get(<span class="string">"Content"</span>);</span><br><span class="line">		    <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">			<span class="keyword">if</span> (MessageUtil.MESSAGE_TEXT.equals(msgType)) {</span><br><span class="line"></span><br><span class="line">				}</span><br><span class="line">			} <span class="keyword">else</span> <span class="keyword">if</span> (MessageUtil.MESSAGE_EVENT.equals(msgType)) {</span><br><span class="line"></span><br><span class="line">			}</span><br><span class="line">		} <span class="keyword">catch</span> (DocumentException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		} <span class="keyword">finally</span> {</span><br><span class="line">			out.close();</span><br><span class="line">		}</span><br><span class="line"></span><br><span class="line">	}</span><br></pre></td></tr></tbody></table></figure>
+自己可以做一些相关的功能实现或者返回消息给用户</li>
+</ol>
+<p>代码部分是网上的，部分是自己的，写的不好，只是一个大概的方法步骤。<br>如有错误，希望指出</p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%B8%A6%E5%8F%82%E4%BA%8C%E7%BB%B4%E7%A0%81%E4%BB%8B%E7%BB%8D"><span class="top-box-text">带参二维码介绍</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%B8%A6%E5%8F%82%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%9A%84%E7%94%9F%E6%88%90"><span class="top-box-text">带参二维码的生成</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%B8%A6%E5%8F%82%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%9A%84%E8%A7%A3%E6%9E%90"><span class="top-box-text">带参二维码的解析</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/09/12/tui-jian-ji-ge-you-qu-de-wang-zhi/">
+              <h3 class="post-title">
+                下一篇：推荐几个有趣的网址
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

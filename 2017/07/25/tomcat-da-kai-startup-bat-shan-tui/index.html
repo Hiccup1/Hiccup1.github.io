@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>tomcat 打开 startup.bat闪退</title>
+<meta name="keywords" content="tomcat 打开 startup.bat闪退, Hiccup&#39;s Blog">
+<meta name="description" content="原因tomcat安装好之后再bin目录下有startup.bat,双击之后闪退，这一般是由于环境变量设置问题
+可以在cmd里查看相关信息，win+r 输入cmd，之后cd到tomcat安装目录的bin目录下，然后输入startup.bat如">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">tomcat 打开 startup.bat闪退</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2017-07-25</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/tomcat/">
+                  tomcat
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>tomcat安装好之后再bin目录下有startup.bat,双击之后闪退，这一般是由于环境变量设置问题</p>
+<p>可以在cmd里查看相关信息，win+r 输入cmd，之后cd到tomcat安装目录的bin目录下，然后输入startup.bat如果提示缺少JAVA_HOME 或者缺少JRE_HOME，那么就是环境变量的问题，一般也就是这个错误</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>可以通过设置JAVA_HOME 和 JRE_HOME来解决，需要JDK，这个可以参考教程安装，安装好之后，计算机-&gt;属性-&gt;环境变量，win10是计算机-&gt;属性-&gt;高级系统设置-&gt;环境变量<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b15998.png" alt="环境变量"><br>选择新建系统变量，变量名为JAVA_HOME，变量值为：JDK安装目录\jdk，然后新建JRE_HOME变量，变量值为jdk安装目录下jdk\jre<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b17fdf.png" alt="JAVA"><br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b1927e.png" alt="jre"><br>之后将这两个变量放到path系统变量中，在path变量值的后面直接追加 ;%JAVA_HOME%;%JRE_HOME%<br>这个必须是这个格式，并且;不可少，如图<br><img src="https://ooo.0o0.ooo/2017/09/11/59b6876b1bd5d.png" alt="path"><br>保存之后就可以启动tomcat</p>
+<blockquote>
+<p>如有错误，欢迎指正</p>
+</blockquote>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%8E%9F%E5%9B%A0"><span class="top-box-text">原因</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="top-box-text">解决方案</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/07/24/acm-jing-li/">
+              <h3 class="post-title">
+                下一篇：ACM经历
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

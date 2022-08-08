@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>简单点餐app的实现</title>
+<meta name="keywords" content="简单点餐app的实现, Hiccup&#39;s Blog">
+<meta name="description" content="简介这学期开了学Android的课，以前也没看过相关的知识，刚好前两周课设用来检验一下学习的成果，就做了一个点餐的app，实现了和服务器后台的交互，数据库用的mysql，用户使用app，商家使用web页面，由于自己弱渣，用了很多别人的设计和">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">简单点餐app的实现</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2017-12-30</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/JAVA/">
+                  JAVA
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/Android/">
+                  Android
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这学期开了学Android的课，以前也没看过相关的知识，刚好前两周课设用来检验一下学习的成果，就做了一个点餐的app，实现了和服务器后台的交互，数据库用的mysql，用户使用app，商家使用web页面，由于自己弱渣，用了很多别人的设计和代码，如有侵权，请联系我。</p>
+<h2 id="APP设计"><a href="#APP设计" class="headerlink" title="APP设计"></a>APP设计</h2><p>Android第一次学，代码写的很乱，请不要介意。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Hiccup1/ELapp">Abdroid项目源码</a>（后台源码在下面）</p>
+<h3 id="界面展示"><a href="#界面展示" class="headerlink" title="界面展示"></a>界面展示</h3><p>这是主要的界面，还有一些展示订单的界面，有一些没用的特效界面。。</p>
+<div>
+<img src="https://i.loli.net/2017/12/30/5a4719de93a12.png" height="330" width="190">
+
+<img src="https://i.loli.net/2017/12/30/5a4719c858184.png" height="330" width="190">
+
+<img src="https://i.loli.net/2017/12/30/5a4719d4f0b19.png" height="330" width="190">
+
+ </div>
+
+<h3 id="设计简要"><a href="#设计简要" class="headerlink" title="设计简要"></a>设计简要</h3><p>第一次做，写的乱七八糟，基本一个页面一个Activity，底部菜单栏用的Tabhost+Activity实现，有些设计用的github上的代码，由于和服务器交互，读取的是数据库的内容，所以Listview使用最频繁，每加载一个页面都会get/post服务器，对于网络延迟的问题就加了一个Dialog等待加载。java部分写的比较乱，将就着看吧。。</p>
+<h3 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h3><p>Github项目中包含了apk文件，可以直接拿来用，不过服务器是我自己的，现在快到期了，可能停止服务。你也可以把后台部署到自己的服务器上来使用，因为后台是用java写的，所以用Tomcat来用就可以。</p>
+<p>如果使用自己的服务器，就要到Android项目中app\src\main\java\com\example\user\util\Data.java 中修改自己的域名或者说ip，这样就可以访问你自己服务器的数据了。war文件和mysql数据库的创建文件也在后台项目中，源码地址在下面。</p>
+<p>其中mysql中图片存储使用的都是外链，你可以使用七牛云，腾讯云，或者其他可提供图片外链的服务。其他数据可以通过商家web界面添加或者直接对数据库操作。</p>
+<h2 id="后台实现"><a href="#后台实现" class="headerlink" title="后台实现"></a>后台实现</h2><p>大二学的java，自己学了一点点java web的知识，这次课设拿来练手，就用eclipse写了后台部署到服务器上，代码稍微比Android好看一些。和app的交互用的servlet接收发送json信息。然后对数据库进行增删改查，实现完整的操作。</p>
+<p>mysql的连接在util类里，可以修改mysql的密码和用户名等等。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Hiccup1/ELjava">后台项目源码</a></p>
+<h3 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h3><p>浏览器访问界面实现商家的注册和登录，可以对自己店铺的菜品类别等等进行修改，也可以实现接单删除等功能，其他的自己去看。</p>
+<h3 id="设计简要-1"><a href="#设计简要-1" class="headerlink" title="设计简要"></a>设计简要</h3><ul>
+<li>util包含数据库连接和json的解析              </li>
+<li>servlet是对app的连接                      </li>
+<li>action里面写了web页面的servlet，实现店铺数据的增删改查               </li>
+<li>model写了数据库中表的信息，get+set            </li>
+<li>dao+imp实现增删改查的具体操作         </li>
+</ul>
+<h3 id="使用注意-1"><a href="#使用注意-1" class="headerlink" title="使用注意"></a>使用注意</h3><p>我写的时候eclipse myeclipse都使用过，直接导入自己的IDE可能出很多问题，慢慢百度或者各种调整说不定能解决，那就可以修改了</p>
+<p>web页面用的jsp，也可以直接看，简单的操作都实现了，具体的自己研究。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果有什么问题可以直接联系我，或者说有错也可以提出，修改和测试才是漫长的过程。       </p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E7%AE%80%E4%BB%8B"><span class="top-box-text">简介</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#APP%E8%AE%BE%E8%AE%A1"><span class="top-box-text">APP设计</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%95%8C%E9%9D%A2%E5%B1%95%E7%A4%BA"><span class="top-box-text">界面展示</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E8%AE%BE%E8%AE%A1%E7%AE%80%E8%A6%81"><span class="top-box-text">设计简要</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F"><span class="top-box-text">使用注意</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%90%8E%E5%8F%B0%E5%AE%9E%E7%8E%B0"><span class="top-box-text">后台实现</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%95%8C%E9%9D%A2"><span class="top-box-text">界面</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E8%AE%BE%E8%AE%A1%E7%AE%80%E8%A6%81-1"><span class="top-box-text">设计简要</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E4%BD%BF%E7%94%A8%E6%B3%A8%E6%84%8F-1"><span class="top-box-text">使用注意</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%80%BB%E7%BB%93"><span class="top-box-text">总结</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/12/09/sui-bi-di-gui-de-miao-yong-1/">
+              <h3 class="post-title">
+                下一篇：随笔：递归的妙用&lt;1&gt;
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

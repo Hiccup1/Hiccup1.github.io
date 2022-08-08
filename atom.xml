@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Hiccup&#39;s Blog</title>
+  
+  <subtitle>Hiccup&#39;s Blog</subtitle>
+  <link href="https://xdong.me/atom.xml" rel="self"/>
+  
+  <link href="https://xdong.me/"/>
+  <updated>2022-08-08T14:39:41.206Z</updated>
+  <id>https://xdong.me/</id>
+  
+  <author>
+    <name>Hiccup</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Java中String和byte[]转换长度异常情况</title>
+    <link href="https://xdong.me/2020/06/12/java-zhong-string-he-byte-zhuan-huan-chang-du-yi-chang-qing-kuang/"/>
+    <id>https://xdong.me/2020/06/12/java-zhong-string-he-byte-zhuan-huan-chang-du-yi-chang-qing-kuang/</id>
+    <published>2020-06-11T16:00:00.000Z</published>
+    <updated>2022-08-08T14:39:41.206Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;工作中遇到，要拆分String成固定字节长度的几串字符。做法是转byte[]，拆分后再转String返回数据，但拆分后的String字节长度并不是前面固定的值&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;需求分析&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>bootstrapTable的生成、动态列、样式渲染</title>
+    <link href="https://xdong.me/2019/08/23/bootstraptable-de-sheng-cheng-dong-tai-lie-yang-shi-xuan-ran/"/>
+    <id>https://xdong.me/2019/08/23/bootstraptable-de-sheng-cheng-dong-tai-lie-yang-shi-xuan-ran/</id>
+    <published>2019-08-23T14:44:25.000Z</published>
+    <updated>2019-08-23T15:31:34.977Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;最近工作用到很多bootstrap的知识，以前我只是简单的用他的响应式样式，关于table生成这种没怎么用过，现在总结一下其中的知识也算复习了。&lt;/p&gt;
+&lt;h2 id=&quot;bootstrapTable-生成&quot;&gt;&lt;a href=&quot;#bootstrapTable-生成&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="bootstrap" scheme="https://xdong.me/categories/bootstrap/"/>
+    
+    
+    <category term="bootstrap" scheme="https://xdong.me/tags/bootstrap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>leetcode第4题：两个排序数组的中位数题解</title>
+    <link href="https://xdong.me/2018/09/19/leetcode-di-4-ti-liang-ge-pai-xu-shu-zu-de-zhong-wei-shu-ti-jie/"/>
+    <id>https://xdong.me/2018/09/19/leetcode-di-4-ti-liang-ge-pai-xu-shu-zu-de-zhong-wei-shu-ti-jie/</id>
+    <published>2018-09-19T14:21:20.000Z</published>
+    <updated>2018-09-19T15:14:36.455Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="leetcode" scheme="https://xdong.me/categories/leetcode/"/>
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/tags/JAVA/"/>
+    
+    <category term="leetcode" scheme="https://xdong.me/tags/leetcode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>排序算法总结</title>
+    <link href="https://xdong.me/2018/09/18/pai-xu-suan-fa-zong-jie/"/>
+    <id>https://xdong.me/2018/09/18/pai-xu-suan-fa-zong-jie/</id>
+    <published>2018-09-18T14:04:38.000Z</published>
+    <updated>2022-08-08T14:36:04.112Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="排序" scheme="https://xdong.me/categories/%E6%8E%92%E5%BA%8F/"/>
+    
+    
+    <category term="排序" scheme="https://xdong.me/tags/%E6%8E%92%E5%BA%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>UEFI启动模式的电脑安装Win10和Ubuntu双系统</title>
+    <link href="https://xdong.me/2018/03/23/uefi-qi-dong-mo-shi-de-dian-nao-an-zhuang-win10-he-ubuntu-shuang-xi-tong/"/>
+    <id>https://xdong.me/2018/03/23/uefi-qi-dong-mo-shi-de-dian-nao-an-zhuang-win10-he-ubuntu-shuang-xi-tong/</id>
+    <published>2018-03-22T16:00:00.000Z</published>
+    <updated>2018-03-31T05:13:33.449Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;文章简介&quot;&gt;&lt;a href=&quot;#文章简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Ubuntu" scheme="https://xdong.me/categories/Ubuntu/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://xdong.me/tags/Ubuntu/"/>
+    
+    <category term="Win10" scheme="https://xdong.me/tags/Win10/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单点餐app的实现</title>
+    <link href="https://xdong.me/2017/12/30/jian-dan-dian-can-app-de-shi-xian/"/>
+    <id>https://xdong.me/2017/12/30/jian-dan-dian-can-app-de-shi-xian/</id>
+    <published>2017-12-29T16:00:00.000Z</published>
+    <updated>2022-08-08T14:36:05.910Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="app" scheme="https://xdong.me/categories/app/"/>
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/tags/JAVA/"/>
+    
+    <category term="Android" scheme="https://xdong.me/tags/Android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>随笔：递归的妙用&lt;1&gt;</title>
+    <link href="https://xdong.me/2017/12/09/sui-bi-di-gui-de-miao-yong-1/"/>
+    <id>https://xdong.me/2017/12/09/sui-bi-di-gui-de-miao-yong-1/</id>
+    <published>2017-12-08T16:00:00.000Z</published>
+    <updated>2018-03-31T05:11:14.021Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;昨天闲的蛋疼在百度知道回答问题，看到一个很有趣的题目，要求用递归实现如下的输出&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;1&lt;br&gt;5</summary>
+        
+      
+    
+    
+    
+    <category term="递归" scheme="https://xdong.me/categories/%E9%80%92%E5%BD%92/"/>
+    
+    
+    <category term="递归" scheme="https://xdong.me/tags/%E9%80%92%E5%BD%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JAVA实现微信支付</title>
+    <link href="https://xdong.me/2017/11/21/java-shi-xian-wei-xin-zhi-fu/"/>
+    <id>https://xdong.me/2017/11/21/java-shi-xian-wei-xin-zhi-fu/</id>
+    <published>2017-11-21T08:39:04.000Z</published>
+    <updated>2018-03-31T05:11:04.713Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/categories/JAVA/"/>
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/tags/JAVA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>微信公众号带参二维码的生成与解析（java)</title>
+    <link href="https://xdong.me/2017/10/02/wei-xin-gong-zhong-hao-dai-can-er-wei-ma-de-sheng-cheng-yu-jie-xi/"/>
+    <id>https://xdong.me/2017/10/02/wei-xin-gong-zhong-hao-dai-can-er-wei-ma-de-sheng-cheng-yu-jie-xi/</id>
+    <published>2017-10-01T16:00:00.000Z</published>
+    <updated>2018-03-31T05:11:33.146Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;这些日子一直在做微信公众号的开发，从头开始学，觉得特别复杂，接口一堆，开发文档看不懂，各种bug，由于现在二维码的广泛流传，接触了带参二维码，写一下生成与解析&lt;/p&gt;
+&lt;h2 id=&quot;带参二维码介绍&quot;&gt;&lt;a href=&quot;#带参二维码介绍&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/categories/JAVA/"/>
+    
+    
+    <category term="JAVA" scheme="https://xdong.me/tags/JAVA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>推荐几个有趣的网址</title>
+    <link href="https://xdong.me/2017/09/12/tui-jian-ji-ge-you-qu-de-wang-zhi/"/>
+    <id>https://xdong.me/2017/09/12/tui-jian-ji-ge-you-qu-de-wang-zhi/</id>
+    <published>2017-09-11T16:00:00.000Z</published>
+    <updated>2018-03-31T05:11:25.950Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;这是在网上发现的一些有趣的网址&lt;/p&gt;
+&lt;p&gt;1 &lt;a href=&quot;http://virtocean.com/&quot;&gt;http://virtocean.com/&lt;/a&gt;&lt;br&gt;可以在线倾听海洋里的各种声音,配着3D的海洋效果&lt;br&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="网址" scheme="https://xdong.me/categories/%E7%BD%91%E5%9D%80/"/>
+    
+    
+    <category term="网址" scheme="https://xdong.me/tags/%E7%BD%91%E5%9D%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hexo+github搭建自己博客（绑定域名）</title>
+    <link href="https://xdong.me/2017/09/09/hexo-github-da-jian-zi-ji-de-bo-ke/"/>
+    <id>https://xdong.me/2017/09/09/hexo-github-da-jian-zi-ji-de-bo-ke/</id>
+    <published>2017-09-08T16:00:00.000Z</published>
+    <updated>2018-03-31T05:01:20.094Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;一直有些荒废，以前就想做个博客，但服务器贵不说，现在备案贼麻烦，后来知道GitHub上面可以做，用hexo或者Jekyll，我就用hexo+github 做了个博客，当然是用的别人摸板。。&lt;/p&gt;
+&lt;h2 id=&quot;安装git&quot;&gt;&lt;a href=&quot;#安装git&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="hexo+github" scheme="https://xdong.me/categories/hexo-github/"/>
+    
+    
+    <category term="hexo" scheme="https://xdong.me/tags/hexo/"/>
+    
+    <category term="github" scheme="https://xdong.me/tags/github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>tomcat 打开 startup.bat闪退</title>
+    <link href="https://xdong.me/2017/07/25/tomcat-da-kai-startup-bat-shan-tui/"/>
+    <id>https://xdong.me/2017/07/25/tomcat-da-kai-startup-bat-shan-tui/</id>
+    <published>2017-07-25T04:20:06.000Z</published>
+    <updated>2018-03-31T05:12:52.244Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;原因&quot;&gt;&lt;a href=&quot;#原因&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="tomcat" scheme="https://xdong.me/categories/tomcat/"/>
+    
+    
+    <category term="tomcat" scheme="https://xdong.me/tags/tomcat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ACM经历</title>
+    <link href="https://xdong.me/2017/07/24/acm-jing-li/"/>
+    <id>https://xdong.me/2017/07/24/acm-jing-li/</id>
+    <published>2017-07-23T16:00:00.000Z</published>
+    <updated>2018-03-31T04:55:01.309Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;2年的经历，教给我很多东西，会遗忘吗？ 当然不会&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;个人经历&quot;&gt;&lt;a href=&quot;#个人经历&quot; class=&quot;headerlink&quot; title=&quot;个人经历&quot;&gt;&lt;/a&gt;个人经历&lt;/h2&gt;&lt;p&gt; </summary>
+        
+      
+    
+    
+    
+    <category term="ACM" scheme="https://xdong.me/categories/ACM/"/>
+    
+    
+    <category term="ACM" scheme="https://xdong.me/tags/ACM/"/>
+    
+  </entry>
+  
+</feed>

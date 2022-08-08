@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>随笔：递归的妙用&lt;1&gt;</title>
+<meta name="keywords" content="随笔：递归的妙用&lt;1&gt;, Hiccup&#39;s Blog">
+<meta name="description" content="起因昨天闲的蛋疼在百度知道回答问题，看到一个很有趣的题目，要求用递归实现如下的输出
+
+15 28 6 310 9 7 4      
+
+想了一段时间， 自己写了个代码，差不多实现了这功能，却又懒得去优化一下。好久没做算法题目lower_bo">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">随笔：递归的妙用&lt;1&gt;</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2017-12-09</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/%E9%80%92%E5%BD%92/">
+                  递归
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>昨天闲的蛋疼在百度知道回答问题，看到一个很有趣的题目，要求用递归实现如下的输出</p>
+<blockquote>
+<p>1<br>5 2<br>8 6 3<br>10 9 7 4      </p>
+</blockquote>
+<p>想了一段时间， 自己写了个代码，差不多实现了这功能，却又懒得去优化一下。好久没做算法题目lower_bound的参数都记得不太清楚了，不过还好自己写出来的没错，程序成功运行。</p>
+<h2 id="代码-结果"><a href="#代码-结果" class="headerlink" title="代码+结果"></a>代码+结果</h2><blockquote>
+<p>代码如下                      </p>
+</blockquote>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;cstdlib&gt;
+#include &lt;set&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+#include &lt;cctype&gt;
+#define LL long long
+using namespace std;
+const LL inf = 1e18;
+const LL mod = 1e9+7;
+int s[10] = {1, 3, 6, 10, 15, 21, 27};
+int m;
+void f(int n, int k, int cnt) {
+    if(n == 1) {
+        return;
+    }
+    else if(cnt == 0) {
+        cnt = m - k - 1;
+        k = m;
+        f(cnt + 1, k, cnt);
+        printf("%d\n", cnt + 1);
+    }else {
+        f(n + k, k - 1, cnt - 1);
+        printf("%d ", n + k);
+    }
+}
+int main() {
+    //1 3 6 10 15 21 27
+    //1 2 3 4  5  6  7
+    //s = (1 + n) * n / 2
+    int n;
+    while(scanf("%d", &amp;n) != EOF) {
+        int k = lower_bound(s, s + 7, n) - s;
+        m = k;
+        f(k + 1, k, k);
+        printf("%d\n", k + 1);
+    }
+    return 0;
+}
+</code></pre>
+<blockquote>
+<p>结果如图<br><img src="https://i.loli.net/2017/12/09/5a2becfde7e04.png" alt="结果"></p>
+</blockquote>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>有时间做做这类型的题目也很有意思，锻炼一下思维还是有好处的，这个写的比较烂，如果有更好的方法，不如说出来大家共同探讨一下。</p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E8%B5%B7%E5%9B%A0"><span class="top-box-text">起因</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E4%BB%A3%E7%A0%81-%E7%BB%93%E6%9E%9C"><span class="top-box-text">代码+结果</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%B0%8F%E7%BB%93"><span class="top-box-text">小结</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/11/21/java-shi-xian-wei-xin-zhi-fu/">
+              <h3 class="post-title">
+                下一篇：JAVA实现微信支付
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

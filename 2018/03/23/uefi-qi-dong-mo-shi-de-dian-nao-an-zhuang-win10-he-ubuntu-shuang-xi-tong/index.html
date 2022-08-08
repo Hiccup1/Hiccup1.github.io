@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>UEFI启动模式的电脑安装Win10和Ubuntu双系统</title>
+<meta name="keywords" content="UEFI启动模式的电脑安装Win10和Ubuntu双系统, Hiccup&#39;s Blog">
+<meta name="description" content="文章简介目前有很多教程安装Ubuntu，但大多数都比较老，而且步骤很繁琐，有的还是错的，偶然看到一篇文章写的很详细而且足够简洁，我获得作者授权后，将他的博文转载至此，原文链接，作者针叶。
+教程双硬盘（固态+机械，并且原Windows的引导盘">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">UEFI启动模式的电脑安装Win10和Ubuntu双系统</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2018-03-23</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/Ubuntu/">
+                  Ubuntu
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/Win10/">
+                  Win10
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <h2 id="文章简介"><a href="#文章简介" class="headerlink" title="文章简介"></a>文章简介</h2><p>目前有很多教程安装Ubuntu，但大多数都比较老，而且步骤很繁琐，有的还是错的，偶然看到一篇文章写的很详细而且足够简洁，我获得作者授权后，将他的博文转载至此，<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803/article/details/52643737">原文链接</a>，作者<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803">针叶</a>。</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>双硬盘（固态+机械，并且原Windows的引导盘在固态）要装双系统，此文不适用（否则会出现安装完Ubuntu后看不到grub菜单或者搞出来grub菜单后看不到Windows Boot Manager选项，因为你把Ubuntu的引导装在了机械硬盘，和Win的引导不在一个盘），请移步大神们的文章：<br>非UEFI：<br><a target="_blank" rel="noopener" href="http://www.jianshu.com/p/c6750e459a94">http://www.jianshu.com/p/c6750e459a94</a><br><a target="_blank" rel="noopener" href="http://jingyan.baidu.com/article/e75aca8551621a142edac6db.html">http://jingyan.baidu.com/article/e75aca8551621a142edac6db.html</a><br>最后应该把固态硬盘分一部分出来作为Ubuntu的引导分区（因为下文所讲的是efi引导，最好不要挂载efi了，而是/boot）。</p>
+<p>UEFI：<br>通过BIOS设置切换硬盘启动顺序，以进入不同系统：<br><a target="_blank" rel="noopener" href="http://www.cnblogs.com/willnote/p/6725594.html">http://www.cnblogs.com/willnote/p/6725594.html</a></p>
+<p>我个人不太喜欢虚拟机下安装系统，一来运行效率不行，二来原生体验不行。</p>
+<p>原本我的电脑是Windows 10专业版，为了体验和学习Linux，我给本本安装了Ubuntu 16.0.4 LTS（目前官网能下载到的最新版本），于是各种搜安装教程，感觉各种复杂。</p>
+<p>后来我发现了他们复杂的原因，我仔细看了下这些教程文章的时间，很多都是好几年前的教程，就算是时间很近的，也是抄来抄去，长篇大论无奇不有。其实那都是因为以前的电脑都不是UEFI启动，而是Legacy，大家都知道Win8以后都有快速启动，必须得依靠UEFI。</p>
+<p>然而随着UEFI的普及，现在你去买笔记本电脑几乎买不到不是UEFI的，这是一种先进安全的启动模式，而且Ubuntu本身也是支持UEFI启动的，所以安装双系统是非常简单的事情。</p>
+<p>第一步最重要的就是你要分区，Linux没有什么C盘D盘的概念，只有分区挂载目录的概念，所以你在Windows下只需要分出一块较大的未分配空间就行，记住不要去格式化，保证其“未分配”属性（Linux的文件系统和Win是不一样的，NTFS和FAT32都不适用）。<br>用Win自带的磁盘管理不能合并不相邻的未分配空间，所以你要想C盘割一点，D盘割一点，再合在一起那是不行的，解决办法是在WinPE系统环境下使用无损分区软件，去合并不同区域的空闲空间，这里不赘述。（如果不愿使用PE的，直接分割已有分区即可，比如你最后一个分区是F盘，分出几十个GB就行，当然前提是你原本空间够大）</p>
+<p>第二，你必须要有一个U盘（光盘就算了太麻烦了），然后使用软碟通或者USBWriter把iso系统镜像文件烧录进去，这是比较传统的方法，但既然我们UEFI启动，那就根本不需要刻录这么麻烦的工作了，<strong>直接将iso里的所有文件解压至U盘即可</strong>。<br><img src="https://i.loli.net/2018/03/23/5ab517e5ac0cb.jpg" alt="图片"><br>大家可以看到，Ubuntu的镜像文件里本身就有EFI文件夹，说明其实支持UEFI引导安装的。</p>
+<p>然后记得关闭Windows的快速启动，重启电脑，我是Dell的本，开机按F2进入BIOS设置，F12进入启动设置，其它电脑类似，大家自行了解。</p>
+<p>进入BIOS设置后，关闭Security Boot（我这里Dell的本是按F12，再选最后那个Change Mode……，然后改为UEFI, Security Boot Off），最后选择UEFI下的U盘启动，所以整个过程根本不用改为Legacy里的HardDisk启动，那是个既老又慢的启动方式。</p>
+<p>选中USB启动，回车后即进入Ubuntu安装流程，<br>前面几步我就不说了，按照正常的步骤，<strong>如果你选择了安装更新和第三方软件，那么一定要记得联网，否则会卡死在最后的进度条上，所以最好不要勾选</strong>。另外，不要选择“与其它系统共存”那一项，而选择最后那个“其它选项（创建自己的分区）”。</p>
+<p>最最最关键的就是分区这一步，这一步直接影响你安装双系统是否成功！下面依次点击新建分区表来挂载分区。</p>
+<p><strong>swap交换空间</strong>，这个也就是虚拟内存的地方，选择<strong>主分区</strong>和<strong>空间起始位置</strong>。如果你给Ubuntu系统分区容量足够的话，最好是能给到你物理内存的2倍大小，像我8GB内存，就可以给个16GB的空间给它，这个看个人使用情况，太小也不好，太大也没用。（其实我只给了8GB，没什么问题）</p>
+<p>新建<strong>efi系统分区</strong>，选中<strong>逻辑分区</strong>（这里不是主分区，请勿怀疑，老式的boot挂载才是主分区）和<strong>空间起始位置</strong>，大小最好不要小于256MB，系统引导文件都会在里面，我给的512MB，它的作用和boot引导分区一样，但是boot引导是默认grub引导的，而efi显然是UEFI引导的。<strong>不要按照那些老教程去选boot引导分区，也就是最后你的挂载点里没有“/boot”这一项，否则你就没办法UEFI启动两个系统了</strong>。</p>
+<p>挂载“**/home<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，这个相当于你的个人文件夹，类似Windows里的User，如果你是个娱乐向的用户，我建议最好能分配稍微大点，因为你的图片、视频、下载内容基本都在这里面，这些东西可不像在Win上面你想移动就能移动的。<br>总的来说，最好不要低于8GB，我Ubuntu分区的总大小是64GB，这里我给了12GB给home。<br>（这里特别提醒一下，Ubuntu最新发行版不建议强制获取Root权限，因为我已经玩崩过一次。所以你以后很多文档、图片、包括免安装软件等资源不得不直接放在home分支下面。你作为图形界面用户，只对home分支有完全的读写执行权限，其余分支例如usr你只能在终端使用sudo命令来操作文件，不利于存放一些直接解压使用的免安装软件。因此，建议home分支多分配一点空间，32GB最好……）</p>
+<p>挂载“**/usr<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，这个相当于你的软件安装位置，Linux下一般来说安装第三方软件你是没办法更改安装目录的，系统都会统一地安装到/usr目录下面，因此你就知道了，这个分区必须要大，我给了32GB。</p>
+<p>最后，挂载“**/<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，<br>因为除了home和usr还有很多别的目录，但那些都不是最重要的，“/”就把除了之前你挂载的home和usr外的全部杂项囊括了，大小也不要太小，最好不低于8GB。如果你非要挨个仔细分配空间，那么你需要知道这些各个分区的含义（Linux(ubuntu)分区挂载点介绍）<br>不过就算你把所有目录都自定义分配了空间也必须要给“/”挂载点分配一定的空间。</p>
+<blockquote>
+<p>分配好各个挂载点后，还有一个至关重要的步骤，那就是选择“<strong>安装引导启动器的设备</strong>”，默认是错&gt;误的，既然我们为Ubuntu分配了efi系统引导分区，那么显然，这里应该把它改成刚刚第2步分配efi引&gt;导的那个分区（比如我安装时它是/dev/sda7，那么我就选这个）。</p>
+</blockquote>
+<p>如此一来，成功一大半，接下来点击安装，等待差不多半小时即可。这个就看电脑配置和网速了。</p>
+<p>这里再多说一句，如果你安装进度条卡在最后的update-notifier-common，请拔掉你的网线也就是断网，然后再连接，多等一会儿就会好。你点一下那行字就会看到安装详情，只要详情在刷新就没问题。</p>
+<p>安装成功后，会提示你拔掉U盘并且重启，重启后记得进入BIOS改回UEFI Security Boot On模式，也就是重新开启Security Boot，然后再重启你就可以看到选择系统的启动引导界面了，一般来说：<br>第一个是Ubuntu，选这个进入Ubuntu系统，<br>第二个是Ubuntu高级选项，<br>第三个是Windows Boot Manager，也就是启动你的Win10，<br>第四个不好意思忘了。</p>
+<p>默认10s自动进入第一个，如果你不动的话。<br>以上教程比网上一些图文更系统更有用，只要你耐心看完，保证万无一失。安装成功后，Win10的快速启动也可以重新开启。</p>
+<p>最最最后，如果大家装好系统后想要恢复U盘到普通状态的话，请看我的另一篇博文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803/article/details/52642887">解决U盘制作Ubuntu系统安装盘后无法格式化且容量无法恢复</a>。</p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%96%87%E7%AB%A0%E7%AE%80%E4%BB%8B"><span class="top-box-text">文章简介</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%95%99%E7%A8%8B"><span class="top-box-text">教程</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/12/30/jian-dan-dian-can-app-de-shi-xian/">
+              <h3 class="post-title">
+                下一篇：简单点餐app的实现
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

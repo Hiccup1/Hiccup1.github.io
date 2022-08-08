@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>hexo+github搭建自己博客（绑定域名）</title>
+<meta name="keywords" content="hexo+github搭建自己博客（绑定域名）, Hiccup&#39;s Blog">
+<meta name="description" content="一直有些荒废，以前就想做个博客，但服务器贵不说，现在备案贼麻烦，后来知道GitHub上面可以做，用hexo或者Jekyll，我就用hexo+github 做了个博客，当然是用的别人摸板。。
+安装git先要安装git，下载地址然后安装，基本上">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">hexo+github搭建自己博客（绑定域名）</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2017-09-09</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/hexo/">
+                  hexo
+                    
+                      ，
+                    
+                  </a>
+                
+                  <a href="/tags/github/">
+                  github
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <p>一直有些荒废，以前就想做个博客，但服务器贵不说，现在备案贼麻烦，后来知道GitHub上面可以做，用hexo或者Jekyll，我就用hexo+github 做了个博客，当然是用的别人摸板。。</p>
+<h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><p>先要安装git，<a target="_blank" rel="noopener" href="https://git-scm.com/downloads">下载地址</a><br><br>然后安装，基本上是一直默认next，其中在这选第二个</p>
+<p><img src="https://ooo.0o0.ooo/2017/09/11/59b687efbde51.jpg" alt="git安装">  </p>
+<p>一路默认安装完成</p>
+<h2 id="安装node-js"><a href="#安装node-js" class="headerlink" title="安装node.js"></a>安装node.js</h2><p>hexo是一款基于Node.js的静态博客框架，需要配置node.js的环境<br><br><a target="_blank" rel="noopener" href="//nodejs.org/en/download/">下载地址</a><br>安装时一路默认就可以</p>
+<h2 id="申请github账号-配置git个人信息"><a href="#申请github账号-配置git个人信息" class="headerlink" title="申请github账号,配置git个人信息"></a>申请github账号,配置git个人信息</h2><p>已有账号的的而且SSH keys配置的可以跳过<br><br>当然也可以自己百度/谷歌，可能更详细<br><br>1.设置Git的user name和email</p>
+<blockquote>
+<p>git config –global user.name “” (引号里面填)<br>git config –global user.email “”   </p>
+</blockquote>
+<p>2.生成密钥 SSH keys</p>
+<blockquote>
+<p>ssh-keygen -t rsa -C “邮箱”</p>
+</blockquote>
+<p>按3个回车，密码为空，最后得到了两个文件：id_rsa和id_rsa.pub，存放路径一般：c:/Users/xxxx_000/.ssh/</p>
+<p>3.注册github账号，这个自己可以吧</p>
+<p>4.登录github，点头像-&gt;Settings-&gt;SSH kyes-&gt;Add SSH key。<br>打开id_rsa.pub文件，全选复制公钥内容,将公钥粘贴到GitHub中Add an SSH key的key输入框，最后“Add Key”。</p>
+<p>5.测试ssh keys是否设置成功。</p>
+<blockquote>
+<p>ssh -T <a href="mailto:git@github.com">git@github.com</a></p>
+</blockquote>
+<p>输入yes, 如果出现Hi xxx! You’ve successfully authenticated, but GitHub does not provide shell access. 说明设置成功。</p>
+<h2 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h2><p>1.创建文件夹，在哪都行，名字最好blog或者hexo什么的<br>2.在文件下，右键运行Git Bash<br>安装hexo</p>
+<blockquote>
+<p>sudo npm install -g hexo</p>
+</blockquote>
+<p>初始化hexo</p>
+<blockquote>
+<p>hexo init</p>
+</blockquote>
+<p>现在已经安装完成，这个文件就是博客根目录，所有操作都在这里面</p>
+<h2 id="找一些主题，也可以克隆"><a href="#找一些主题，也可以克隆" class="headerlink" title="找一些主题，也可以克隆"></a>找一些主题，也可以克隆</h2><p>找到喜欢的主题后放到themes文件下<br>生成静态页面</p>
+<blockquote>
+<p>hexo generate（hexo g也可以）</p>
+</blockquote>
+<p>本地启动<br>启动本地服务，进行文章预览调试，命令：</p>
+<blockquote>
+<p>hexo server (hexo s)</p>
+</blockquote>
+<p>浏览器输入<a href="http://localhost:4000就可以本地查看博客">http://localhost:4000就可以本地查看博客</a></p>
+<h2 id="配置到github上"><a href="#配置到github上" class="headerlink" title="配置到github上"></a>配置到github上</h2><p>github上面新建一个仓库new repository，仓库名必须为【your_user_name.github.io】，<br>例如 Hiccup1.github.io<br><img src="https://ooo.0o0.ooo/2017/09/11/59b68942d770e.png" alt="仓库名"></p>
+<p>现在打开config.yml文件（自己建的文件夹下），来建立关联<br>翻到下面改成这个样子<br><img src="https://ooo.0o0.ooo/2017/09/11/59b687efa62c1.png" alt="config.yml"><br>注意冒号前面有空格<br>然后执行命令：</p>
+<blockquote>
+<p>npm install hexo-deployer-git –save</p>
+</blockquote>
+<p>接下来就可以发布到github上面</p>
+<blockquote>
+<p>hexo deploy(hexo d)</p>
+</blockquote>
+<p>一般指令就是</p>
+<blockquote>
+<p>hexo clean<br>hexo g  (生成静态文件)<br>hexo s  (启动本地服务,可以<a href="http://localhost:4000本地查看">http://localhost:4000本地查看</a>)<br>hexo d  (发布到github上)</p>
+</blockquote>
+<p>这时候就可以访问自己博客<a target="_blank" rel="noopener" href="http://hiccup1.github.io/">http://Hiccup1.github.io</a> (改成你自己的)</p>
+<p>如果自己有域名，可以绑定为自己域名<br>要将域名解析到github的地址（就是Hiccup1.github.io地址，你也可以ping自己的xx.github.io）</p>
+<p>点击settings<br><img src="https://ooo.0o0.ooo/2017/09/11/59b687efb5264.png" alt="aa"></p>
+<p>翻到下面,填上去，保存</p>
+<p><img src="https://ooo.0o0.ooo/2017/09/11/59b687efb434b.png" alt="aaa"></p>
+<p>也可以在根目录/source 目录下创建一个新文件CNAME(不带任何后缀)，直接在CNAME文件中写上自己的域名</p>
+<blockquote>
+<p>hexo g<br>hexo d </p>
+</blockquote>
+<p>就可以了</p>
+<h2 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h2><p>写博客可以用Markdown </p>
+<p>主题可以去网上找一下<br><a target="_blank" rel="noopener" href="https://hexo.io/themes/">https://hexo.io/themes/</a><br><a target="_blank" rel="noopener" href="http://www.jianshu.com/p/bcdbe7347c8d">http://www.jianshu.com/p/bcdbe7347c8d</a></p>
+<p>对于博客需要图片什么的不推荐直接上传，可以在七牛云里面申请空间，七牛云存储也提供了免费CDN配额：存储空间 10GB，每月下载流量 10GB，每月 PUT/DELETE 10万次请求，每月 GET 100万次请求。月流量在10GB以下的博客基本上可以一直免费使用七牛云存储CDN服务了</p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%AE%89%E8%A3%85git"><span class="top-box-text">安装git</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%AE%89%E8%A3%85node-js"><span class="top-box-text">安装node.js</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E7%94%B3%E8%AF%B7github%E8%B4%A6%E5%8F%B7-%E9%85%8D%E7%BD%AEgit%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF"><span class="top-box-text">申请github账号,配置git个人信息</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="top-box-text">安装hexo</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%89%BE%E4%B8%80%E4%BA%9B%E4%B8%BB%E9%A2%98%EF%BC%8C%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%85%8B%E9%9A%86"><span class="top-box-text">找一些主题，也可以克隆</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E9%85%8D%E7%BD%AE%E5%88%B0github%E4%B8%8A"><span class="top-box-text">配置到github上</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%9D%82%E9%A1%B9"><span class="top-box-text">杂项</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2017/07/25/tomcat-da-kai-startup-bat-shan-tui/">
+              <h3 class="post-title">
+                下一篇：tomcat 打开 startup.bat闪退
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

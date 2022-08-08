@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>Java中String和byte[]转换长度异常情况</title>
+<meta name="keywords" content="Java中String和byte[]转换长度异常情况, Hiccup&#39;s Blog">
+<meta name="description" content="
+工作中遇到，要拆分String成固定字节长度的几串字符。做法是转byte[]，拆分后再转String返回数据，但拆分后的String字节长度并不是前面固定的值
+
+需求分析  举个例子，一个String字符串要拆分成2个字符串，需要保证第一">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">Java中String和byte[]转换长度异常情况</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2020-06-12</span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <blockquote>
+<p>工作中遇到，要拆分String成固定字节长度的几串字符。做法是转byte[]，拆分后再转String返回数据，但拆分后的String字节长度并不是前面固定的值</p>
+</blockquote>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>  举个例子，一个String字符串要拆分成2个字符串，需要保证第一个字符串为5个字节，此处也只针对前半部分字符串进行讨论。</p>
+<p>  以前学C语言还记得英文字符占1个字节，中文占2个字节，到java变成英文字符占2个字节，但实际上是字符编码不同影响所占字节数。此文章以UTF-8为准，Java中汉字占3个字节。</p>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//原字符串</span><br><span class="line">String str = "你是谁";</span><br><span class="line">//原字符串全转为byte数组</span><br><span class="line">byte[] b = str.getBytes("UTF-8");</span><br><span class="line">//拆分的第一个byte数组，保证只有5个字节长度</span><br><span class="line">byte[] b1 = new byte[5];</span><br><span class="line">//将原byte数组复制前5个字节到拆分的第一个数组b1</span><br><span class="line">for (int i = 0; i &lt; 5; i++) {</span><br><span class="line">    b1[i] = b[i];</span><br><span class="line">};</span><br><span class="line">//b1数组转为需要返回的前半部分字符串，按理说b1数组是5个字节，那么str1应该也是5个字节</span><br><span class="line">String str1 = new String(b1, "UTF-8");</span><br><span class="line">//对str1再次转换，转成byte[]</span><br><span class="line">byte[] b2 = str1.getBytes("UTF-8");</span><br><span class="line">//对相关数据输出展示</span><br><span class="line">System.out.println("str原字符串：" + str);</span><br><span class="line">System.out.println("str原字符串转换的byte数组b：" + Arrays.toString(b));</span><br><span class="line"></span><br><span class="line">System.out.println("str前5个字节的byte数组b1：" + Arrays.toString(b1));</span><br><span class="line">System.out.println("str拆分后的前半部分字符串str1：" + str1);</span><br><span class="line"></span><br><span class="line">System.out.println("str1再次转为byte数组b2：" + Arrays.toString(b2));</span><br><span class="line">System.out.println("str1再次转为byte数组b2的长度：" + b2.length);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看一下输出</p>
+<blockquote>
+<p>str原字符串：你是谁<br>str原字符串转换的byte数组b：[-28, -67, -96, -26, -104, -81, -24, -80, -127]<br>str前5个字节的byte数组b1：[-28, -67, -96, -26, -104]<br>str拆分后的前半部分字符串str1：你�<br>str1再次转为byte数组b2：[-28, -67, -96, -17, -65, -67]<br>str1再次转为byte数组b2的长度：6</p>
+</blockquote>
+<p>问题出现了，前5个字节转换成的字符串str1，再转成byte[]变成6个字节了。</p>
+<p>原因：汉字3个字节，原字符串3个汉字，共9个字节，切割前5个必然会把一个汉字分割，切分后的5个字节前3个按照UTF-8还可以转换为汉字，但是后2个已经无法组成一个汉字，我猜测若UTF-8中没有这2个字节组成的字符就会变成乱码，导致再次转换出现异常。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>  在进行转换时首先要确定字符编码，统一一种来进行开发，其次如果有切割字符串的操作（此处的切割指的是字节层面，并非单纯的切分），要尽量避免把一个汉字切分，可以适当移动字符串使得刚好不切割汉字。</p>
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="top-box-text">需求分析</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="top-box-text">代码分析</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%B0%8F%E7%BB%93"><span class="top-box-text">小结</span></a></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2019/08/23/bootstraptable-de-sheng-cheng-dong-tai-lie-yang-shi-xuan-ran/">
+              <h3 class="post-title">
+                下一篇：bootstrapTable的生成、动态列、样式渲染
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>

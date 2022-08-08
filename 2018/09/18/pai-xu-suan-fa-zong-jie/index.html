@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<meta charset="utf-8" >
+
+<title>排序算法总结</title>
+<meta name="keywords" content="排序算法总结, Hiccup&#39;s Blog">
+<meta name="description" content="简介刷leetcode碰到一个难题，里面用到了分治法，想到了归并排序，觉得以前学的排序基本忘得差不多了，特别是快排，直接sort()调用，自己基本实现不了，索性重新复习一遍
+归并排序简介归并排序(Merging Sort)就是将两个或两个以">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+  <body>
+    <div id="app" class="main">
+      <div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://xdong.me">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://xdong.me">
+        <h1 class="site-title">Hiccup&#39;s Blog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/categories" class="menu purple-link">
+        分类
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/friends" class="menu purple-link">
+        友链
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+      <div class="content-container">
+        <div class="post-detail">
+          
+          <h2 class="post-title">排序算法总结</h2>
+          <div class="post-info post-detail-info">
+            <span><i class="icon icon-calendar-outline"></i> 2018-09-18</span>
+            
+              <span>
+              <i class="icon icon-pricetags-outline"></i>
+                
+                  <a href="/tags/%E6%8E%92%E5%BA%8F/">
+                  排序
+                    
+                  </a>
+                
+              </span>
+            
+          </div>
+          <div class="post-content-wrapper">
+            <div class="post-content">
+              <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>刷leetcode碰到一个难题，里面用到了分治法，想到了归并排序，觉得以前学的排序基本忘得差不多了，特别是快排，直接sort()调用，自己基本实现不了，索性重新复习一遍</p>
+<h2 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>归并排序(Merging Sort)就是将两个或两个以上的有序表合并成一个有序表的过程。将两个有序表合并成一个有序表的过程称为2-路归并，2-路归并最为简单和常用。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。</p>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>假设初始序列含有n个记录，则可以看成是n个有序的子序列，每个子序列的长度是１，然后两两归并，得到[n/2]个长度为2或１的有序子序列；再两两归并,…如此重复，直到得到一个长度为n的有序子序列为止。</p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>1.排序：归并排序的时间复杂度是O(nlog2n)，当有n个记录时，需要进行log2n次归并排序，每一次归并，关键字比较次数不超过n，元素移动次数都是n，因此是nlog2n。<br>归并排序是稳定排序(在原序列中，r[i]=r[j]，且r[i]在r[j]之前，而在排序后的序列中，r[i]仍在r[j]之前，则称这种排序算法是稳定的)，可以用于链式结构。<br>2.找逆序对数，以前打ACM碰到过好几次，第一次见到这种题觉得好难，这就说明对归并排序理解不深，这点在紫书上也提到过。当然也可以通过树状数组解决这类问题。</p>
+<h3 id="代码＋解释"><a href="#代码＋解释" class="headerlink" title="代码＋解释"></a>代码＋解释</h3><p><img src="https://i.loli.net/2018/09/19/5ba1c26ba50b3.png" alt="归并排序"><br>对于这张图，将原序列分解为n个子序列，然后开始比较归并，对于分解可以用二分＋递归来实现，合并也是一样。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//算法实现</span><br><span class="line">//采用紫书代码</span><br><span class="line">void merge_sort(int* A, int x, int y, int* T) {</span><br><span class="line">    if(y - x &gt; 1) {</span><br><span class="line">        int m = x + (y - x) / 2;     //划分</span><br><span class="line">	int p = x, q = m, i = x;    </span><br><span class="line">	merge_sort(A, x, m, T);      //递归求解</span><br><span class="line">	merge_sort(A, m, y, T);      //递归求解</span><br><span class="line">	while(p &lt; m || q &lt; y) {</span><br><span class="line">	    if(q &gt;= y || (p &lt; m &amp;&amp; A[p] &lt;= A[q])) T[i++] = A[p++];     //从左半数组复制到临时空间</span><br><span class="line">	    else T[i++] = A[q++];                                      //从右半数组复制到临时空间</span><br><span class="line">	　　　　// else T[i++] = A[q++], cnt += m - p;                     //这一行就可以实现求逆序对数的问题，其中cnt要先清零</span><br><span class="line">	}</span><br><span class="line">	for(i = x; i &lt; y; i++) A[i] = T[i];                            //从辅助空间复制回A数组</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+            </div>
+            <div class="top-div">
+              <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E7%AE%80%E4%BB%8B"><span class="top-box-text">简介</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="top-box-text">归并排序</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%AE%80%E4%BB%8B-1"><span class="top-box-text">简介</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="top-box-text">算法思想</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E7%94%A8%E9%80%94"><span class="top-box-text">用途</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E4%BB%A3%E7%A0%81%EF%BC%8B%E8%A7%A3%E9%87%8A"><span class="top-box-text">代码＋解释</span></a></li></ol></li></ol>
+            </div>
+          </div>
+        </div>
+
+        
+          <div class="next-post">
+            <a class="purple-link" href="/2018/03/23/uefi-qi-dong-mo-shi-de-dian-nao-an-zhuang-win10-he-ubuntu-shuang-xi-tong/">
+              <h3 class="post-title">
+                下一篇：UEFI启动模式的电脑安装Win10和Ubuntu双系统
+              </h3>
+            </a>
+          </div>
+        
+      </div>
+
+    
+
+
+      <footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/Hiccup1" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+    </div>
+    
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+  </body>
+</html>
