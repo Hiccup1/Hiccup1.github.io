@@ -25,7 +25,7 @@
   
 
   <!-- Raleway-Font -->
-  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
 
   <!-- hexo site css -->
   
@@ -86,23 +86,23 @@
     <ul>
       
         <li class="nav-item" data-path="/">
-          <a href="/">Home</a>
+          <a href="/">主页</a>
         </li>
       
         <li class="nav-item" data-path="/archives/">
-          <a href="/archives/">Archives</a>
+          <a href="/archives/">归档</a>
         </li>
       
         <li class="nav-item" data-path="/tags/">
-          <a href="/tags/">Tags</a>
+          <a href="/tags/">标签</a>
         </li>
       
         <li class="nav-item" data-path="/friends/">
-          <a href="/friends/">Friends</a>
+          <a href="/friends/">友链</a>
         </li>
       
         <li class="nav-item" data-path="/about/">
-          <a href="/about/">About</a>
+          <a href="/about/">关于</a>
         </li>
       
     </ul>
@@ -174,7 +174,7 @@
 </blockquote>
 <h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p>  举个例子，一个String字符串要拆分成2个字符串，需要保证第一个字符串为5个字节，此处也只针对前半部分字符串进行讨论。</p>
 <p>  以前学C语言还记得英文字符占1个字节，中文占2个字节，到java变成英文字符占2个字节，但实际上是字符编码不同影响所占字节数。此文章以UTF-8为准，Java中汉字占3个字节。</p>
-<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//原字符串</span><br><span class="line">String str = "你是谁";</span><br><span class="line">//原字符串全转为byte数组</span><br><span class="line">byte[] b = str.getBytes("UTF-8");</span><br><span class="line">//拆分的第一个byte数组，保证只有5个字节长度</span><br><span class="line">byte[] b1 = new byte[5];</span><br><span class="line">//将原byte数组复制前5个字节到拆分的第一个数组b1</span><br><span class="line">for (int i = 0; i &lt; 5; i++) {</span><br><span class="line">    b1[i] = b[i];</span><br><span class="line">};</span><br><span class="line">//b1数组转为需要返回的前半部分字符串，按理说b1数组是5个字节，那么str1应该也是5个字节</span><br><span class="line">String str1 = new String(b1, "UTF-8");</span><br><span class="line">//对str1再次转换，转成byte[]</span><br><span class="line">byte[] b2 = str1.getBytes("UTF-8");</span><br><span class="line">//对相关数据输出展示</span><br><span class="line">System.out.println("str原字符串：" + str);</span><br><span class="line">System.out.println("str原字符串转换的byte数组b：" + Arrays.toString(b));</span><br><span class="line"></span><br><span class="line">System.out.println("str前5个字节的byte数组b1：" + Arrays.toString(b1));</span><br><span class="line">System.out.println("str拆分后的前半部分字符串str1：" + str1);</span><br><span class="line"></span><br><span class="line">System.out.println("str1再次转为byte数组b2：" + Arrays.toString(b2));</span><br><span class="line">System.out.println("str1再次转为byte数组b2的长度：" + b2.length);</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原字符串</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">"你是谁"</span>;</span><br><span class="line"><span class="comment">//原字符串全转为byte数组</span></span><br><span class="line"><span class="type">byte</span>[] b = str.getBytes(<span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="comment">//拆分的第一个byte数组，保证只有5个字节长度</span></span><br><span class="line"><span class="type">byte</span>[] b1 = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">5</span>];</span><br><span class="line"><span class="comment">//将原byte数组复制前5个字节到拆分的第一个数组b1</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) {</span><br><span class="line">    b1[i] = b[i];</span><br><span class="line">};</span><br><span class="line"><span class="comment">//b1数组转为需要返回的前半部分字符串，按理说b1数组是5个字节，那么str1应该也是5个字节</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(b1, <span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="comment">//对str1再次转换，转成byte[]</span></span><br><span class="line"><span class="type">byte</span>[] b2 = str1.getBytes(<span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="comment">//对相关数据输出展示</span></span><br><span class="line">System.out.println(<span class="string">"str原字符串："</span> + str);</span><br><span class="line">System.out.println(<span class="string">"str原字符串转换的byte数组b："</span> + Arrays.toString(b));</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"str前5个字节的byte数组b1："</span> + Arrays.toString(b1));</span><br><span class="line">System.out.println(<span class="string">"str拆分后的前半部分字符串str1："</span> + str1);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"str1再次转为byte数组b2："</span> + Arrays.toString(b2));</span><br><span class="line">System.out.println(<span class="string">"str1再次转为byte数组b2的长度："</span> + b2.length);</span><br></pre></td></tr></tbody></table></figure>
 
 <p>可以看一下输出</p>
 <blockquote>

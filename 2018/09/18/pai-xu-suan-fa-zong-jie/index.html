@@ -25,7 +25,7 @@
   
 
   <!-- Raleway-Font -->
-  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
 
   <!-- hexo site css -->
   
@@ -86,23 +86,23 @@
     <ul>
       
         <li class="nav-item" data-path="/">
-          <a href="/">Home</a>
+          <a href="/">主页</a>
         </li>
       
         <li class="nav-item" data-path="/archives/">
-          <a href="/archives/">Archives</a>
+          <a href="/archives/">归档</a>
         </li>
       
         <li class="nav-item" data-path="/tags/">
-          <a href="/tags/">Tags</a>
+          <a href="/tags/">标签</a>
         </li>
       
         <li class="nav-item" data-path="/friends/">
-          <a href="/friends/">Friends</a>
+          <a href="/friends/">友链</a>
         </li>
       
         <li class="nav-item" data-path="/about/">
-          <a href="/about/">About</a>
+          <a href="/about/">关于</a>
         </li>
       
     </ul>
@@ -185,7 +185,7 @@
 <h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><p>假设初始序列含有n个记录，则可以看成是n个有序的子序列，每个子序列的长度是１，然后两两归并，得到[n/2]个长度为2或１的有序子序列；再两两归并,…如此重复，直到得到一个长度为n的有序子序列为止。</p>
 <h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>1.排序：归并排序的时间复杂度是O(nlog2n)，当有n个记录时，需要进行log2n次归并排序，每一次归并，关键字比较次数不超过n，元素移动次数都是n，因此是nlog2n。<br>归并排序是稳定排序(在原序列中，r[i]=r[j]，且r[i]在r[j]之前，而在排序后的序列中，r[i]仍在r[j]之前，则称这种排序算法是稳定的)，可以用于链式结构。<br>2.找逆序对数，以前打ACM碰到过好几次，第一次见到这种题觉得好难，这就说明对归并排序理解不深，这点在紫书上也提到过。当然也可以通过树状数组解决这类问题。</p>
 <h3 id="代码＋解释"><a href="#代码＋解释" class="headerlink" title="代码＋解释"></a>代码＋解释</h3><p><img src="https://i.loli.net/2018/09/19/5ba1c26ba50b3.png" alt="归并排序"><br>对于这张图，将原序列分解为n个子序列，然后开始比较归并，对于分解可以用二分＋递归来实现，合并也是一样。</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//算法实现</span><br><span class="line">//采用紫书代码</span><br><span class="line">void merge_sort(int* A, int x, int y, int* T) {</span><br><span class="line">    if(y - x &gt; 1) {</span><br><span class="line">        int m = x + (y - x) / 2;     //划分</span><br><span class="line">	int p = x, q = m, i = x;    </span><br><span class="line">	merge_sort(A, x, m, T);      //递归求解</span><br><span class="line">	merge_sort(A, m, y, T);      //递归求解</span><br><span class="line">	while(p &lt; m || q &lt; y) {</span><br><span class="line">	    if(q &gt;= y || (p &lt; m &amp;&amp; A[p] &lt;= A[q])) T[i++] = A[p++];     //从左半数组复制到临时空间</span><br><span class="line">	    else T[i++] = A[q++];                                      //从右半数组复制到临时空间</span><br><span class="line">	　　　　// else T[i++] = A[q++], cnt += m - p;                     //这一行就可以实现求逆序对数的问题，其中cnt要先清零</span><br><span class="line">	}</span><br><span class="line">	for(i = x; i &lt; y; i++) A[i] = T[i];                            //从辅助空间复制回A数组</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//算法实现</span></span><br><span class="line"><span class="comment">//采用紫书代码</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge_sort</span><span class="params">(<span class="type">int</span>* A, <span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span>* T)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span>(y - x &gt; <span class="number">1</span>) {</span><br><span class="line">        <span class="type">int</span> m = x + (y - x) / <span class="number">2</span>;     <span class="comment">//划分</span></span><br><span class="line">	<span class="type">int</span> p = x, q = m, i = x;    </span><br><span class="line">	<span class="built_in">merge_sort</span>(A, x, m, T);      <span class="comment">//递归求解</span></span><br><span class="line">	<span class="built_in">merge_sort</span>(A, m, y, T);      <span class="comment">//递归求解</span></span><br><span class="line">	<span class="keyword">while</span>(p &lt; m || q &lt; y) {</span><br><span class="line">	    <span class="keyword">if</span>(q &gt;= y || (p &lt; m &amp;&amp; A[p] &lt;= A[q])) T[i++] = A[p++];     <span class="comment">//从左半数组复制到临时空间</span></span><br><span class="line">	    <span class="keyword">else</span> T[i++] = A[q++];                                      <span class="comment">//从右半数组复制到临时空间</span></span><br><span class="line">	　　　　<span class="comment">// else T[i++] = A[q++], cnt += m - p;                     //这一行就可以实现求逆序对数的问题，其中cnt要先清零</span></span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">for</span>(i = x; i &lt; y; i++) A[i] = T[i];                            <span class="comment">//从辅助空间复制回A数组</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 
 
