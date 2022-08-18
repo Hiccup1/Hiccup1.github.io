@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Hiccup" />
+  <meta name="description" content="都是小人物，会点代码就行了" />
+  
+  
+  <title>
+    
+      JAVA实现微信支付 
+      
+      
+      |
+    
+     Hiccup&#39;s Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Hiccup</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">JAVA实现微信支付</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2017-11-21 16:39:04
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/JAVA/" title="JAVA">
+                    <b>#</b> JAVA
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间在做一个微信公众号，需要用到微信支付的接口，第一次用，果然和前面写其他接口经历一样，好繁琐的操作。去找了相关资料，看了看文档，越看越复杂，大多数博客上面的总是缺着一部分跑不起来，官方demo又好复杂，索性自己好好搞一次。</p>
+<h2 id="需求准备"><a href="#需求准备" class="headerlink" title="需求准备"></a>需求准备</h2><p>1.首先一个公众号（服务号），也可以企业号，订阅号没有支付权限（权限可以查文档），可以去微信公众平台申请，而且需要认证，一年300<br>2.一个域名，必须经过ICP备案，必须备案，很重要，也就是说还需要一个服务器，备案大概1个月<br>3.<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_1">微信支付开发文档</a><br>4.商户平台账号，也就是微信支付平台，前段时间微信支付单独迁移到了商户平台，所以需要单独申请</p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>1.前提公众号的配置已经完成，比如在公众平台的服务器配置，接口域名配置，授权配置等等。还有商户平台的支付授权目录填写。这些都可以通过文档或者搜索引擎找到。<br>2.接下来需要调用统一下单接口获取预支付id（prepay_id）<br>其中需要很多参数，参数的具体含义可见<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1">文档</a><br>这是<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3">签名生成算法</a>大多数错误都是由于签名错误             </p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//微信支付</span></span><br><span class="line"><span class="type">String</span> <span class="variable">nonceStr</span> <span class="operator">=</span> <span class="string">"2D8264ILTKCH16CQ2502SI8ZNMTM67VS"</span>;<span class="comment">//随机字符串,可以自己生成</span></span><br><span class="line"><span class="type">String</span> <span class="variable">MCHID</span> <span class="operator">=</span> <span class="string">"11111111"</span>;    <span class="comment">//商户号，商户平台注册</span></span><br><span class="line"><span class="type">String</span> <span class="variable">WX_APPID</span> <span class="operator">=</span> ;  <span class="comment">//APPID，也就是公众平台APPID</span></span><br><span class="line"><span class="type">String</span> <span class="variable">body</span> <span class="operator">=</span> <span class="string">"xx"</span>;  <span class="comment">//商品描述</span></span><br><span class="line"><span class="type">String</span> <span class="variable">WX_PAY_CALLBACK</span> <span class="operator">=</span> <span class="string">""</span>;<span class="comment">//异步接收微信支付结果通知的回调地址</span></span><br><span class="line"><span class="type">String</span> <span class="variable">ip</span> <span class="operator">=</span> request.getRemoteAddr(); <span class="comment">//用户端ip</span></span><br><span class="line"><span class="type">String</span> <span class="variable">orderSn</span> <span class="operator">=</span> String.valueOf((<span class="type">int</span>)(<span class="keyword">new</span> <span class="title class_">Date</span>().getTime()));<span class="comment">//商户订单号,这用的是时间</span></span><br><span class="line"><span class="type">String</span> <span class="variable">relAmount</span> <span class="operator">=</span> <span class="number">1</span>;<span class="comment">//订单总金额，单位为分</span></span><br><span class="line"><span class="type">String</span> <span class="variable">openid</span> <span class="operator">=</span> user.getOpenid();  <span class="comment">//用户openid</span></span><br><span class="line"><span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> <span class="string">""</span>;  <span class="comment">//商户平台API秘钥</span></span><br><span class="line"><span class="comment">// 加密，这里只列举必填字段</span></span><br><span class="line">Map&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, String&gt;();</span><br><span class="line">map.put(<span class="string">"body"</span>, body);<span class="comment">//商品描述</span></span><br><span class="line">map.put(<span class="string">"mch_id"</span>, MCHID);<span class="comment">//商户平台id</span></span><br><span class="line">map.put(<span class="string">"appid"</span>, WX_APPID);<span class="comment">//公众号id</span></span><br><span class="line">map.put(<span class="string">"nonce_str"</span>, nonceStr);<span class="comment">//随机字符串</span></span><br><span class="line">map.put(<span class="string">"notify_url"</span>, WX_PAY_CALLBACK);<span class="comment">//异步回调api</span></span><br><span class="line">map.put(<span class="string">"spbill_create_ip"</span>, ip);<span class="comment">//支付ip</span></span><br><span class="line">map.put(<span class="string">"out_trade_no"</span>, orderSn);<span class="comment">//商品订单号</span></span><br><span class="line">map.put(<span class="string">"total_fee"</span>, relAmount);<span class="comment">//真实金额</span></span><br><span class="line">map.put(<span class="string">"trade_type"</span>, <span class="string">"JSAPI"</span>);<span class="comment">//JSAPI、h5调用</span></span><br><span class="line">map.put(<span class="string">"openid"</span>, openid);<span class="comment">//支付用户openid</span></span><br><span class="line"><span class="type">String</span> <span class="variable">paySign</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">	paySign = WeixinUtil.getPayCustomSign(map,key);<span class="comment">//WeixinUtil类会在下面展示</span></span><br><span class="line">	<span class="comment">//这一句是签名生成算法</span></span><br><span class="line">} <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">	<span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">	e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">map.put(<span class="string">"sign"</span>,paySign);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"sign  "</span> + paySign);</span><br><span class="line"><span class="type">String</span> <span class="variable">xml</span> <span class="operator">=</span> <span class="string">"&lt;xml&gt;"</span> +</span><br><span class="line">                <span class="string">"&lt;appid&gt;"</span>+ WX_APPID +<span class="string">"&lt;/appid&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;body&gt;"</span>+ body +<span class="string">"&lt;/body&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;mch_id&gt;"</span>+ MCHID +<span class="string">"&lt;/mch_id&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;nonce_str&gt;"</span>+ nonceStr +<span class="string">"&lt;/nonce_str&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;notify_url&gt;"</span>+ WX_PAY_CALLBACK +<span class="string">"&lt;/notify_url&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;openid&gt;"</span>+ openid +<span class="string">"&lt;/openid&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;out_trade_no&gt;"</span>+ orderSn +<span class="string">"&lt;/out_trade_no&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;spbill_create_ip&gt;"</span>+ ip +<span class="string">"&lt;/spbill_create_ip&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;total_fee&gt;"</span>+ relAmount + <span class="string">""</span> +<span class="string">"&lt;/total_fee&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;trade_type&gt;JSAPI&lt;/trade_type&gt;"</span>+</span><br><span class="line">                <span class="string">"&lt;sign&gt;"</span>+ paySign +<span class="string">"&lt;/sign&gt;"</span>+</span><br><span class="line">             <span class="string">"&lt;/xml&gt;"</span>;</span><br><span class="line">System.out.println(xml);</span><br><span class="line"><span class="comment">//将map转为XML格式</span></span><br><span class="line"><span class="comment">//统一下单，这里不用改 </span></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">"https://api.mch.weixin.qq.com/pay/unifiedorder"</span>; <span class="comment">//统一下单接口</span></span><br><span class="line"><span class="type">String</span> <span class="variable">xmlStr</span> <span class="operator">=</span> WeixinUtil.post(url, xml); <span class="comment">//post请求数据</span></span><br><span class="line">System.out.println(xmlStr);</span><br><span class="line"><span class="type">String</span> <span class="variable">prepayid</span> <span class="operator">=</span> <span class="string">""</span>; </span><br><span class="line"><span class="keyword">if</span> (xmlStr.indexOf(<span class="string">"SUCCESS"</span>) != -<span class="number">1</span>) {  </span><br><span class="line">Map&lt;String, String&gt; map2 = <span class="literal">null</span>;  </span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">map2 = WeixinUtil.xmlToMap(xmlStr);  </span><br><span class="line">} <span class="keyword">catch</span> (Exception e) {</span><br><span class="line"><span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">e.printStackTrace();</span><br><span class="line">}  </span><br><span class="line"></span><br><span class="line">prepayid = (String) map2.get(<span class="string">"prepay_id"</span>);  <span class="comment">//获取prepayid</span></span><br><span class="line">System.out.println(<span class="string">"prepay_id  "</span> + prepayid);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在如果返回了prepay id，那么这一步就算完成，如果出现错误，一般都是签名出错，这时候就要好好看看有没有语法错误，或者签名算法有误。</p>
+<p>3.第二次签名，然后传值到前端</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">timestamp</span> <span class="operator">=</span> System.currentTimeMillis() / <span class="number">1000</span>; <span class="comment">//时间戳</span></span><br><span class="line">Map&lt;String, String&gt; signMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, String&gt;();</span><br><span class="line">signMap.put(<span class="string">"appId"</span>, WX_APPID);<span class="comment">//appid</span></span><br><span class="line">signMap.put(<span class="string">"timeStamp"</span>, String.valueOf(timestamp));</span><br><span class="line">signMap.put(<span class="string">"nonceStr"</span>, nonceStr);</span><br><span class="line">signMap.put(<span class="string">"package"</span>, <span class="string">"prepay_id="</span>+prepayid);</span><br><span class="line">signMap.put(<span class="string">"signType"</span>, <span class="string">"MD5"</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">paySign2</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line"><span class="keyword">try</span> {</span><br><span class="line">paySign2 = WeixinUtil.getPayCustomSign(signMap,key);</span><br><span class="line">System.out.println(paySign2);</span><br><span class="line">} <span class="keyword">catch</span> (Exception e) {</span><br><span class="line"><span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">e.printStackTrace();</span><br><span class="line">}</span><br><span class="line">System.out.println(<span class="string">"timestamp"</span> + timestamp);</span><br><span class="line"><span class="comment">//以下的数据需要传到前端，可以用自己的方法传值</span></span><br><span class="line">request.setAttribute(<span class="string">"appId"</span>, WX_APPID); </span><br><span class="line">request.setAttribute(<span class="string">"paytimestamp"</span>, String.valueOf(timestamp));</span><br><span class="line">request.setAttribute(<span class="string">"paynonceStr"</span>, nonceStr);</span><br><span class="line">request.setAttribute(<span class="string">"paypackage"</span>, <span class="string">"prepay_id="</span>+prepayid);</span><br><span class="line">request.setAttribute(<span class="string">"paysignType"</span>,<span class="string">"MD5"</span>);</span><br><span class="line">request.setAttribute(<span class="string">"paySign"</span>, paySign2);</span><br><span class="line"><span class="comment">//去到确认支付页面,返回页面方式不同,(例：pay.html页面)</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>4.H5调用微信支付接口  <a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7&amp;index=6">官方文档</a>内含代码<br>只需把参数改为自己的，调用接口就可以完成支付</p>
+<p>5.我用到的WeixinUtil类，只是写了用到的一部分，导入的包可能很多没用。。    </p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"><span class="keyword">import</span> java.net.URLEncoder;</span><br><span class="line"><span class="keyword">import</span> java.security.MessageDigest;</span><br><span class="line"><span class="keyword">import</span> java.sql.Timestamp;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.Comparator;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.parsers.DocumentBuilder;</span><br><span class="line"><span class="keyword">import</span> javax.xml.parsers.DocumentBuilderFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.ClientProtocolException;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpGet;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpPost;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.entity.StringEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.DefaultHttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.util.EntityUtils;</span><br><span class="line"><span class="keyword">import</span> org.w3c.dom.Node;</span><br><span class="line"><span class="keyword">import</span> org.w3c.dom.NodeList;</span><br><span class="line"><span class="keyword">import</span> org.xmlpull.v1.XmlPullParser;</span><br><span class="line"><span class="keyword">import</span> org.xmlpull.v1.XmlPullParserException;</span><br><span class="line"><span class="keyword">import</span> org.xmlpull.v1.XmlPullParserFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> net.sf.json.JSONObject;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeixinUtil</span> {</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String hexDigits[] = { <span class="string">"0"</span>, <span class="string">"1"</span>, <span class="string">"2"</span>, <span class="string">"3"</span>, <span class="string">"4"</span>, <span class="string">"5"</span>,  </span><br><span class="line">	        <span class="string">"6"</span>, <span class="string">"7"</span>, <span class="string">"8"</span>, <span class="string">"9"</span>, <span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"d"</span>, <span class="string">"e"</span>, <span class="string">"f"</span> };  </span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">post</span><span class="params">(String url,String outStr)</span>{</span><br><span class="line">		<span class="type">DefaultHttpClient</span> <span class="variable">httpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultHttpClient</span>();</span><br><span class="line">		<span class="type">HttpPost</span> <span class="variable">httpPost</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpPost</span>(url);</span><br><span class="line">		<span class="type">String</span> <span class="variable">res</span> <span class="operator">=</span><span class="literal">null</span>;</span><br><span class="line">		<span class="keyword">try</span> {</span><br><span class="line">			httpPost.setEntity(<span class="keyword">new</span> <span class="title class_">StringEntity</span>(outStr, <span class="string">"utf-8"</span>));</span><br><span class="line">			<span class="type">HttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> httpClient.execute(httpPost);</span><br><span class="line">			<span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> EntityUtils.toString(response.getEntity(),<span class="string">"utf-8"</span>);</span><br><span class="line">			res = result;</span><br><span class="line">		} <span class="keyword">catch</span> (UnsupportedEncodingException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		} <span class="keyword">catch</span> (ClientProtocolException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		} <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		}</span><br><span class="line">		<span class="keyword">return</span> res;</span><br><span class="line">	}</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取支付所需签名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">getPayCustomSign</span><span class="params">(Map&lt;String, String&gt; bizObj,String key)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="type">String</span> <span class="variable">bizString</span> <span class="operator">=</span> FormatBizQueryParaMap(bizObj, <span class="literal">false</span>);</span><br><span class="line">        <span class="keyword">return</span> sign(bizString, key);</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">  <span class="comment">//支付所需签名处调用此方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">sign</span><span class="params">(String content, String key)</span></span><br><span class="line">            <span class="keyword">throws</span> Exception{</span><br><span class="line">        <span class="type">String</span> <span class="variable">signStr</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line">        signStr = content + <span class="string">"&amp;key="</span> + key;</span><br><span class="line">        <span class="keyword">return</span> MD5(signStr).toUpperCase();</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">  <span class="comment">//上一方法，MD5加密处理</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String <span class="title function_">MD5</span><span class="params">(String s)</span> {</span><br><span class="line">        <span class="type">char</span> hexDigits[]={<span class="string">'0'</span>,<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>,<span class="string">'6'</span>,<span class="string">'7'</span>,<span class="string">'8'</span>,<span class="string">'9'</span>,<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'F'</span>};       </span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="type">byte</span>[] btInput = s.getBytes();</span><br><span class="line">            <span class="type">MessageDigest</span> <span class="variable">mdInst</span> <span class="operator">=</span> MessageDigest.getInstance(<span class="string">"MD5"</span>);</span><br><span class="line">            mdInst.update(btInput);</span><br><span class="line">            <span class="type">byte</span>[] md = mdInst.digest();</span><br><span class="line">            <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> md.length;</span><br><span class="line">            <span class="type">char</span> str[] = <span class="keyword">new</span> <span class="title class_">char</span>[j * <span class="number">2</span>];</span><br><span class="line">            <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; j; i++) {</span><br><span class="line">                <span class="type">byte</span> <span class="variable">byte0</span> <span class="operator">=</span> md[i];</span><br><span class="line">                str[k++] = hexDigits[byte0 &gt;&gt;&gt; <span class="number">4</span> &amp; <span class="number">0xf</span>];</span><br><span class="line">                str[k++] = hexDigits[byte0 &amp; <span class="number">0xf</span>];</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>(str);</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">       }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 字典排序</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">FormatBizQueryParaMap</span><span class="params">(Map&lt;String, String&gt; paraMap,</span></span><br><span class="line"><span class="params">            <span class="type">boolean</span> urlencode)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="type">String</span> <span class="variable">buff</span> <span class="operator">=</span> <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            List&lt;Map.Entry&lt;String, String&gt;&gt; infoIds = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Map.Entry&lt;String, String&gt;&gt;(paraMap.entrySet());</span><br><span class="line">            Collections.sort(infoIds,</span><br><span class="line">                    <span class="keyword">new</span> <span class="title class_">Comparator</span>&lt;Map.Entry&lt;String, String&gt;&gt;() {</span><br><span class="line">           <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compare</span><span class="params">(Map.Entry&lt;String, String&gt; o1,</span></span><br><span class="line"><span class="params">                  Map.Entry&lt;String, String&gt; o2)</span> {</span><br><span class="line">                 <span class="keyword">return</span> (o1.getKey()).toString().compareTo(</span><br><span class="line">                                    o2.getKey());</span><br><span class="line">                        }</span><br><span class="line">                    });</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; infoIds.size(); i++) {</span><br><span class="line">                Map.Entry&lt;String, String&gt; item = infoIds.get(i);</span><br><span class="line">                <span class="comment">//System.out.println(item.getKey());</span></span><br><span class="line">                <span class="keyword">if</span> (item.getKey() != <span class="string">""</span>) {</span><br><span class="line">                    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> item.getKey();</span><br><span class="line">                    <span class="type">String</span> <span class="variable">val</span> <span class="operator">=</span> item.getValue();</span><br><span class="line">                    <span class="keyword">if</span> (urlencode) {</span><br><span class="line">                        val = URLEncoder.encode(val, <span class="string">"utf-8"</span>);</span><br><span class="line">                    }</span><br><span class="line">                    buff += key + <span class="string">"="</span> + val + <span class="string">"&amp;"</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (buff.isEmpty() == <span class="literal">false</span>) {</span><br><span class="line">                buff = buff.substring(<span class="number">0</span>, buff.length() - <span class="number">1</span>);</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Exception</span>(e.getMessage());</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> buff;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, String&gt; <span class="title function_">xmlToMap</span><span class="params">(String strXML)</span> <span class="keyword">throws</span> Exception {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            Map&lt;String, String&gt; data = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;String, String&gt;();</span><br><span class="line">            <span class="type">DocumentBuilderFactory</span> <span class="variable">documentBuilderFactory</span> <span class="operator">=</span> DocumentBuilderFactory.newInstance();</span><br><span class="line">            <span class="type">DocumentBuilder</span> <span class="variable">documentBuilder</span> <span class="operator">=</span> documentBuilderFactory.newDocumentBuilder();</span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">stream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayInputStream</span>(strXML.getBytes(<span class="string">"UTF-8"</span>));</span><br><span class="line">            org.w3c.dom.<span class="type">Document</span> <span class="variable">doc</span> <span class="operator">=</span> documentBuilder.parse(stream);</span><br><span class="line">            doc.getDocumentElement().normalize();</span><br><span class="line">            <span class="type">NodeList</span> <span class="variable">nodeList</span> <span class="operator">=</span> doc.getDocumentElement().getChildNodes();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> <span class="number">0</span>; idx &lt; nodeList.getLength(); ++idx) {</span><br><span class="line">                <span class="type">Node</span> <span class="variable">node</span> <span class="operator">=</span> nodeList.item(idx);</span><br><span class="line">                <span class="keyword">if</span> (node.getNodeType() == Node.ELEMENT_NODE) {</span><br><span class="line">                    org.w3c.dom.<span class="type">Element</span> <span class="variable">element</span> <span class="operator">=</span> (org.w3c.dom.Element) node;</span><br><span class="line">                    data.put(element.getNodeName(), element.getTextContent());</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                stream.close();</span><br><span class="line">            } <span class="keyword">catch</span> (Exception ex) {</span><br><span class="line">                <span class="comment">// do nothing</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> data;</span><br><span class="line">        } <span class="keyword">catch</span> (Exception ex) {</span><br><span class="line">            <span class="comment">//WXPayUtil.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXML);</span></span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>官方文档写的比较难懂，其他的又比较杂，有的不能用，当然也可以github找demo，这也是我第一次做这些，写的很难看不要在意，如果有错的地方希望提出来，欢迎指导交流。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2017/10/02/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E5%B8%A6%E5%8F%82%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%9A%84%E7%94%9F%E6%88%90%E4%B8%8E%E8%A7%A3%E6%9E%90/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2017-11-21 16:39:04
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/JAVA/" title="JAVA">
+                        <b>#</b> JAVA
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2017/12/09/%E9%9A%8F%E7%AC%94%EF%BC%9A%E9%80%92%E5%BD%92%E7%9A%84%E5%A6%99%E7%94%A8-1/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E5%87%86%E5%A4%87"><span class="toc-text">需求准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E8%BF%87%E7%A8%8B"><span class="toc-text">实现过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/Hiccup1">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="mailto:i@xdong.me">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Hiccup</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + JAVA%E5%AE%9E%E7%8E%B0%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98 + '&url=' + https%3A%2F%2Fxdong.me%2F2017%2F11%2F21%2FJAVA%25E5%25AE%259E%25E7%258E%25B0%25E5%25BE%25AE%25E4%25BF%25A1%25E6%2594%25AF%25E4%25BB%2598%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://xdong.me/2017/11/21/JAVA%E5%AE%9E%E7%8E%B0%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

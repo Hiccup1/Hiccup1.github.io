@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Hiccup" />
+  <meta name="description" content="都是小人物，会点代码就行了" />
+  
+  
+  <title>
+    
+      leetcode第4题：两个排序数组的中位数题解 
+      
+      
+      |
+    
+     Hiccup&#39;s Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Hiccup</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">leetcode第4题：两个排序数组的中位数题解</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2018-09-19 22:21:20
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/JAVA/" title="JAVA">
+                    <b>#</b> JAVA
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/leetcode/" title="leetcode">
+                    <b>#</b> leetcode
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>做到第四题，感觉好难，复杂度O(log(m+n))不好做，觉得该二分，做了一个小时放弃了，感觉没大一大二那种一直做下去，几个小时都不放弃的精力了，也可能是天气太热…..索性看了看官方的题解，顿时感觉茅塞顿开，我就把那题解放到这来吧。<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/#">原文链接</a></p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>为了解决这个问题，我们需要理解“中位数的作用是什么”。在统计中，中位数被用来：</p>
+<blockquote>
+<p>将一个集合划分为两个长度相等的子集，其中一个子集中的元素总是大于另一个子集中的元素。</p>
+</blockquote>
+<p>如果理解了中位数的划分作用，我们就很接近答案了。</p>
+<p>首先，让我们在任一位置  将 A 划分成两个部分：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   left_A                |        right_A</span><br><span class="line">A[0], A[1], ..., A[i-1]  |  A[i], A[i+1], ..., A[m-1]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>由于 A 中有 m 个元素， 所以我们有 m+1 种划分的方法（i=0∼m）。</p>
+<p>我们知道：</p>
+<blockquote>
+<p>len(left_A)=i,len(right_A)=m−i.</p>
+</blockquote>
+<blockquote>
+<p>注意：当 i=0 时，left_A 为空集， 而当 i=m 时, right_A 为空集。</p>
+</blockquote>
+<p>采用同样的方式，我们在任一位置 j 将 B 划分成两个部分：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  left_B                 |        right_B</span><br><span class="line">B[0], B[1], ..., B[j-1]  |  B[j], B[j+1], ..., B[n-1]</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<p>将 left_A 和 left_B 放入一个集合，并将 rright_A 和 right_B 放入另一个集合。 再把这两个新的集合分别命名为 left_part 和 right_part：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">      left_part          |        right_part</span><br><span class="line">A[0], A[1], ..., A[i-1]  |  A[i], A[i+1], ..., A[m-1]</span><br><span class="line">B[0], B[1], ..., B[j-1]  |  B[j], B[j+1], ..., B[n-1]</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果我们可以确认：</p>
+<blockquote>
+<p>1.len(left_part)=len(right_part)<br>2.max⁡(left_part)≤min⁡(right_part)</p>
+</blockquote>
+<p>那么，我们已经将 {A,B} 中的所有元素划分为相同长度的两个部分，且其中一部分中的元素总是大于另一部分中的元素。那么：</p>
+<p>median=max(left_part)+min(right_part)​ / 2</p>
+<p>要确保这两个条件，我们只需要保证：</p>
+<blockquote>
+<p>1.i+j=m−i+n−j（或：m−i+n−j+1） 如果 n≥m，只需要使  i=0∼m, j=(m+n+1)/2−i<br>2.B[j−1]≤A[i] 以及 A[i−1]≤B[j]</p>
+</blockquote>
+<p>ps.1 为了简化分析，我假设 A[i−1],B[j−1],A[i],B[j]总是存在，哪怕出现 i=0，i=m，j=0，或是 j=n 这样的临界条件。 我将在最后讨论如何处理这些临界值。</p>
+<p>ps.2 为什么 n≥m？由于0≤i≤m且 j=(m+n+1)/2−i，我必须确保 j 不是负数。如果 n&lt;m，那么 j 将可能是负数，而这会造成错误的答案。</p>
+<p>所以，我们需要做的是：</p>
+<blockquote>
+<p>在 [0，m] 中搜索并找到目标对象 i，以使：<br>B[j−1]≤A[i] 且  A[i−1]≤B[j],其中 j=(m+n+1)/2−i</p>
+</blockquote>
+<p>接着，我们可以按照以下步骤来进行二叉树搜索：</p>
+<p>设 imin=0，imax=m, 然后开始在 [imin,imax] 中进行搜索。<br>令 i=(imin+imax)/2​， j=(m+n+1)/2−i</p>
+<p>现在我们有 len(left_part)=len(right_part)。 而且我们只会遇到三种情况：</p>
+<p>B[j−1]≤A[i] 且 A[i−1]≤B[j]：<br>这意味着我们找到了目标对象 i，所以可以停止搜索。</p>
+<p>B[j−1]&gt;A[i]：<br>这意味着 A[i] 太小，我们必须调整 i 以使 B[j−1]≤A[i]。<br>我们可以增大 i 吗？<br>是的，因为当 i 被增大的时候，j 就会被减小。<br>因此 B[j−1] 会减小，而 A[i] 会增大，那么 B[j−1]≤A[i] 就可能被满足。<br>我们可以减小 i 吗？<br>不行，因为当 i 被减小的时候，j 就会被增大。<br>因此 B[j−1] 会增大，而 A[i] 会减小，那么 B[j−1]≤A[i] 就可能不满足。<br>所以我们必须增大 i。也就是说，我们必须将搜索范围调整为 [i+1,imax]。 因此，设imin=i+1并转到步骤 2。</p>
+<p>A[i−1]&gt;B[j]： 这意味着 A[i−1] 太大，我们必须减小 i 以使 A[i−1]≤B[j]。 也就是说，我们必须将搜索范围调整为 [imin,i−1]。<br>因此，设 imax=i−1，并转到步骤 2。</p>
+<p>当找到目标对象 i 时，中位数为：</p>
+<blockquote>
+<p>max(A[i−1],B[j−1]),  当 m+n 为奇数时</p>
+</blockquote>
+<blockquote>
+<p>max⁡(A[i−1],B[j−1])+min⁡(A[i],B[j])/2, ​,  当 m+n为偶数时</p>
+</blockquote>
+<p>现在，让我们来考虑这些临界值 i=0,i=m,j=0,j=n，此时 A[i−1],B[j−1],A[i],B[j] 可能不存在。 其实这种情况比你想象的要容易得多。</p>
+<p>我们需要做的是确保 max(left_part)≤min(right_part)。 因此，如果 i 和 j 不是临界值（这意味着 A[i−1],B[j−1],A[i],B[j]全部存在）, 那么我们必须同时检查 B[j−1]≤A[i] 以及 A[i−1]≤B[j] 是否成立。 但是如果 A[i−1],B[j−1],A[i],B[j] 中部分不存在，那么我们只需要检查这两个条件中的一个（或不需要检查）。 举个例子，如果 i=0，那么 A[i−1]不存在，我们就不需要检查 A[i−1]≤B[j] 是否成立。 所以，我们需要做的是：</p>
+<blockquote>
+<p>在 [0，m] 中搜索并找到目标对象 i，以使：<br>(j=0 or i=m or B[j−1]≤A[i]) 或是 (i=0 or j=n or A[i−1]≤B[j]), 其中 j=(m+n+1)/2−i</p>
+</blockquote>
+<p>在循环搜索中，我们只会遇到三种情况：</p>
+<blockquote>
+<p>(j=0 or i=m or B[j−1]≤A[i])) 或是(i=0 or j=n or A[i−1]≤B[j])这意味着 i 是完美的，我们可以停止搜索。<br>j&gt;0 and i&lt;m and B[j−1]&gt;A[i]这意味着 i 太小，我们必须增大它。<br>i&gt;0 and j&lt;n and A[i−1]&gt;B[j]这意味着 i 太大，我们必须减小它。</p>
+</blockquote>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> {</span><br><span class="line">    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">findMedianSortedArrays</span><span class="params">(<span class="type">int</span>[] A, <span class="type">int</span>[] B)</span> {</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> A.length;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> B.length;</span><br><span class="line">        <span class="keyword">if</span> (m &gt; n) { <span class="comment">// to ensure m&lt;=n</span></span><br><span class="line">            <span class="type">int</span>[] temp = A; A = B; B = temp;</span><br><span class="line">            <span class="type">int</span> <span class="variable">tmp</span> <span class="operator">=</span> m; m = n; n = tmp;</span><br><span class="line">        }</span><br><span class="line">        <span class="type">int</span> <span class="variable">iMin</span> <span class="operator">=</span> <span class="number">0</span>, iMax = m, halfLen = (m + n + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">while</span> (iMin &lt;= iMax) {</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> (iMin + iMax) / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> halfLen - i;</span><br><span class="line">            <span class="keyword">if</span> (i &lt; iMax &amp;&amp; B[j-<span class="number">1</span>] &gt; A[i]){</span><br><span class="line">                iMin = i + <span class="number">1</span>; <span class="comment">// i is too small</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (i &gt; iMin &amp;&amp; A[i-<span class="number">1</span>] &gt; B[j]) {</span><br><span class="line">                iMax = i - <span class="number">1</span>; <span class="comment">// i is too big</span></span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> { <span class="comment">// i is perfect</span></span><br><span class="line">                <span class="type">int</span> <span class="variable">maxLeft</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span> (i == <span class="number">0</span>) { maxLeft = B[j-<span class="number">1</span>]; }</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="number">0</span>) { maxLeft = A[i-<span class="number">1</span>]; }</span><br><span class="line">                <span class="keyword">else</span> { maxLeft = Math.max(A[i-<span class="number">1</span>], B[j-<span class="number">1</span>]); }</span><br><span class="line">                <span class="keyword">if</span> ( (m + n) % <span class="number">2</span> == <span class="number">1</span> ) { <span class="keyword">return</span> maxLeft; }</span><br><span class="line"></span><br><span class="line">                <span class="type">int</span> <span class="variable">minRight</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">if</span> (i == m) { minRight = B[j]; }</span><br><span class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (j == n) { minRight = A[i]; }</span><br><span class="line">                <span class="keyword">else</span> { minRight = Math.min(B[j], A[i]); }</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> (maxLeft + minRight) / <span class="number">2.0</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>复杂度分析</p>
+<p>时间复杂度：O(log⁡(min(m,n)))，<br>首先，查找的区间是 [0,m]。 而该区间的长度在每次循环之后都会减少为原来的一半。 所以，我们只需要执行 log⁡(m) 次循环。由于我们在每次循环中进行常量次数的操作，所以时间复杂度为 O(log⁡(m))。 由于 m≤n，所以时间复杂度是 O(log⁡(min(m,n)))。</p>
+<p>空间复杂度：O(1)， 我们只需要恒定的内存来存储 9 个局部变量， 所以空间复杂度为 O(1)。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2018/09/18/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2018-09-19 22:21:20
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/JAVA/" title="JAVA">
+                        <b>#</b> JAVA
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/leetcode/" title="leetcode">
+                        <b>#</b> leetcode
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2019/08/23/bootstrapTable%E7%9A%84%E7%94%9F%E6%88%90%E3%80%81%E5%8A%A8%E6%80%81%E5%88%97%E3%80%81%E6%A0%B7%E5%BC%8F%E6%B8%B2%E6%9F%93/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">解决方案</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/Hiccup1">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="mailto:i@xdong.me">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Hiccup</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + leetcode%E7%AC%AC4%E9%A2%98%EF%BC%9A%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0%E9%A2%98%E8%A7%A3 + '&url=' + https%3A%2F%2Fxdong.me%2F2018%2F09%2F19%2Fleetcode%25E7%25AC%25AC4%25E9%25A2%2598%25EF%25BC%259A%25E4%25B8%25A4%25E4%25B8%25AA%25E6%258E%2592%25E5%25BA%258F%25E6%2595%25B0%25E7%25BB%2584%25E7%259A%2584%25E4%25B8%25AD%25E4%25BD%258D%25E6%2595%25B0%25E9%25A2%2598%25E8%25A7%25A3%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://xdong.me/2018/09/19/leetcode%E7%AC%AC4%E9%A2%98%EF%BC%9A%E4%B8%A4%E4%B8%AA%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0%E9%A2%98%E8%A7%A3/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

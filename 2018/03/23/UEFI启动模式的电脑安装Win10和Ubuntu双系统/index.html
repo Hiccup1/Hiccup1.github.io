@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Hiccup" />
+  <meta name="description" content="都是小人物，会点代码就行了" />
+  
+  
+  <title>
+    
+      UEFI启动模式的电脑安装Win10和Ubuntu双系统 
+      
+      
+      |
+    
+     Hiccup&#39;s Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Hiccup</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">UEFI启动模式的电脑安装Win10和Ubuntu双系统</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2018-03-23 00:00:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/Ubuntu/" title="Ubuntu">
+                    <b>#</b> Ubuntu
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/Win10/" title="Win10">
+                    <b>#</b> Win10
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="文章简介"><a href="#文章简介" class="headerlink" title="文章简介"></a>文章简介</h2><p>目前有很多教程安装Ubuntu，但大多数都比较老，而且步骤很繁琐，有的还是错的，偶然看到一篇文章写的很详细而且足够简洁，我获得作者授权后，将他的博文转载至此，<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803/article/details/52643737">原文链接</a>，作者<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803">针叶</a>。</p>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><p>双硬盘（固态+机械，并且原Windows的引导盘在固态）要装双系统，此文不适用（否则会出现安装完Ubuntu后看不到grub菜单或者搞出来grub菜单后看不到Windows Boot Manager选项，因为你把Ubuntu的引导装在了机械硬盘，和Win的引导不在一个盘），请移步大神们的文章：<br>非UEFI：<br><a target="_blank" rel="noopener" href="http://www.jianshu.com/p/c6750e459a94">http://www.jianshu.com/p/c6750e459a94</a><br><a target="_blank" rel="noopener" href="http://jingyan.baidu.com/article/e75aca8551621a142edac6db.html">http://jingyan.baidu.com/article/e75aca8551621a142edac6db.html</a><br>最后应该把固态硬盘分一部分出来作为Ubuntu的引导分区（因为下文所讲的是efi引导，最好不要挂载efi了，而是/boot）。</p>
+<p>UEFI：<br>通过BIOS设置切换硬盘启动顺序，以进入不同系统：<br><a target="_blank" rel="noopener" href="http://www.cnblogs.com/willnote/p/6725594.html">http://www.cnblogs.com/willnote/p/6725594.html</a></p>
+<p>我个人不太喜欢虚拟机下安装系统，一来运行效率不行，二来原生体验不行。</p>
+<p>原本我的电脑是Windows 10专业版，为了体验和学习Linux，我给本本安装了Ubuntu 16.0.4 LTS（目前官网能下载到的最新版本），于是各种搜安装教程，感觉各种复杂。</p>
+<p>后来我发现了他们复杂的原因，我仔细看了下这些教程文章的时间，很多都是好几年前的教程，就算是时间很近的，也是抄来抄去，长篇大论无奇不有。其实那都是因为以前的电脑都不是UEFI启动，而是Legacy，大家都知道Win8以后都有快速启动，必须得依靠UEFI。</p>
+<p>然而随着UEFI的普及，现在你去买笔记本电脑几乎买不到不是UEFI的，这是一种先进安全的启动模式，而且Ubuntu本身也是支持UEFI启动的，所以安装双系统是非常简单的事情。</p>
+<p>第一步最重要的就是你要分区，Linux没有什么C盘D盘的概念，只有分区挂载目录的概念，所以你在Windows下只需要分出一块较大的未分配空间就行，记住不要去格式化，保证其“未分配”属性（Linux的文件系统和Win是不一样的，NTFS和FAT32都不适用）。<br>用Win自带的磁盘管理不能合并不相邻的未分配空间，所以你要想C盘割一点，D盘割一点，再合在一起那是不行的，解决办法是在WinPE系统环境下使用无损分区软件，去合并不同区域的空闲空间，这里不赘述。（如果不愿使用PE的，直接分割已有分区即可，比如你最后一个分区是F盘，分出几十个GB就行，当然前提是你原本空间够大）</p>
+<p>第二，你必须要有一个U盘（光盘就算了太麻烦了），然后使用软碟通或者USBWriter把iso系统镜像文件烧录进去，这是比较传统的方法，但既然我们UEFI启动，那就根本不需要刻录这么麻烦的工作了，<strong>直接将iso里的所有文件解压至U盘即可</strong>。<br><img src="https://i.loli.net/2018/03/23/5ab517e5ac0cb.jpg" alt="图片"><br>大家可以看到，Ubuntu的镜像文件里本身就有EFI文件夹，说明其实支持UEFI引导安装的。</p>
+<p>然后记得关闭Windows的快速启动，重启电脑，我是Dell的本，开机按F2进入BIOS设置，F12进入启动设置，其它电脑类似，大家自行了解。</p>
+<p>进入BIOS设置后，关闭Security Boot（我这里Dell的本是按F12，再选最后那个Change Mode……，然后改为UEFI, Security Boot Off），最后选择UEFI下的U盘启动，所以整个过程根本不用改为Legacy里的HardDisk启动，那是个既老又慢的启动方式。</p>
+<p>选中USB启动，回车后即进入Ubuntu安装流程，<br>前面几步我就不说了，按照正常的步骤，<strong>如果你选择了安装更新和第三方软件，那么一定要记得联网，否则会卡死在最后的进度条上，所以最好不要勾选</strong>。另外，不要选择“与其它系统共存”那一项，而选择最后那个“其它选项（创建自己的分区）”。</p>
+<p>最最最关键的就是分区这一步，这一步直接影响你安装双系统是否成功！下面依次点击新建分区表来挂载分区。</p>
+<p><strong>swap交换空间</strong>，这个也就是虚拟内存的地方，选择<strong>主分区</strong>和<strong>空间起始位置</strong>。如果你给Ubuntu系统分区容量足够的话，最好是能给到你物理内存的2倍大小，像我8GB内存，就可以给个16GB的空间给它，这个看个人使用情况，太小也不好，太大也没用。（其实我只给了8GB，没什么问题）</p>
+<p>新建<strong>efi系统分区</strong>，选中<strong>逻辑分区</strong>（这里不是主分区，请勿怀疑，老式的boot挂载才是主分区）和<strong>空间起始位置</strong>，大小最好不要小于256MB，系统引导文件都会在里面，我给的512MB，它的作用和boot引导分区一样，但是boot引导是默认grub引导的，而efi显然是UEFI引导的。<strong>不要按照那些老教程去选boot引导分区，也就是最后你的挂载点里没有“/boot”这一项，否则你就没办法UEFI启动两个系统了</strong>。</p>
+<p>挂载“**/home<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，这个相当于你的个人文件夹，类似Windows里的User，如果你是个娱乐向的用户，我建议最好能分配稍微大点，因为你的图片、视频、下载内容基本都在这里面，这些东西可不像在Win上面你想移动就能移动的。<br>总的来说，最好不要低于8GB，我Ubuntu分区的总大小是64GB，这里我给了12GB给home。<br>（这里特别提醒一下，Ubuntu最新发行版不建议强制获取Root权限，因为我已经玩崩过一次。所以你以后很多文档、图片、包括免安装软件等资源不得不直接放在home分支下面。你作为图形界面用户，只对home分支有完全的读写执行权限，其余分支例如usr你只能在终端使用sudo命令来操作文件，不利于存放一些直接解压使用的免安装软件。因此，建议home分支多分配一点空间，32GB最好……）</p>
+<p>挂载“**/usr<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，这个相当于你的软件安装位置，Linux下一般来说安装第三方软件你是没办法更改安装目录的，系统都会统一地安装到/usr目录下面，因此你就知道了，这个分区必须要大，我给了32GB。</p>
+<p>最后，挂载“**/<strong>”，类型为</strong>EXT4日志文件系统<strong>，选中</strong>逻辑分区<strong>和</strong>空间起始位置**，<br>因为除了home和usr还有很多别的目录，但那些都不是最重要的，“/”就把除了之前你挂载的home和usr外的全部杂项囊括了，大小也不要太小，最好不低于8GB。如果你非要挨个仔细分配空间，那么你需要知道这些各个分区的含义（Linux(ubuntu)分区挂载点介绍）<br>不过就算你把所有目录都自定义分配了空间也必须要给“/”挂载点分配一定的空间。</p>
+<blockquote>
+<p>分配好各个挂载点后，还有一个至关重要的步骤，那就是选择“<strong>安装引导启动器的设备</strong>”，默认是错&gt;误的，既然我们为Ubuntu分配了efi系统引导分区，那么显然，这里应该把它改成刚刚第2步分配efi引&gt;导的那个分区（比如我安装时它是/dev/sda7，那么我就选这个）。</p>
+</blockquote>
+<p>如此一来，成功一大半，接下来点击安装，等待差不多半小时即可。这个就看电脑配置和网速了。</p>
+<p>这里再多说一句，如果你安装进度条卡在最后的update-notifier-common，请拔掉你的网线也就是断网，然后再连接，多等一会儿就会好。你点一下那行字就会看到安装详情，只要详情在刷新就没问题。</p>
+<p>安装成功后，会提示你拔掉U盘并且重启，重启后记得进入BIOS改回UEFI Security Boot On模式，也就是重新开启Security Boot，然后再重启你就可以看到选择系统的启动引导界面了，一般来说：<br>第一个是Ubuntu，选这个进入Ubuntu系统，<br>第二个是Ubuntu高级选项，<br>第三个是Windows Boot Manager，也就是启动你的Win10，<br>第四个不好意思忘了。</p>
+<p>默认10s自动进入第一个，如果你不动的话。<br>以上教程比网上一些图文更系统更有用，只要你耐心看完，保证万无一失。安装成功后，Win10的快速启动也可以重新开启。</p>
+<p>最最最后，如果大家装好系统后想要恢复U盘到普通状态的话，请看我的另一篇博文：<a target="_blank" rel="noopener" href="https://blog.csdn.net/ysy950803/article/details/52642887">解决U盘制作Ubuntu系统安装盘后无法格式化且容量无法恢复</a>。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2017/12/30/%E7%AE%80%E5%8D%95%E7%82%B9%E9%A4%90app%E7%9A%84%E5%AE%9E%E7%8E%B0/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2018-03-23 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Ubuntu/" title="Ubuntu">
+                        <b>#</b> Ubuntu
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Win10/" title="Win10">
+                        <b>#</b> Win10
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2018/09/18/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E7%AB%A0%E7%AE%80%E4%BB%8B"><span class="toc-text">文章简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%99%E7%A8%8B"><span class="toc-text">教程</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/Hiccup1">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="mailto:i@xdong.me">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Hiccup</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + UEFI%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%94%B5%E8%84%91%E5%AE%89%E8%A3%85Win10%E5%92%8CUbuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F + '&url=' + https%3A%2F%2Fxdong.me%2F2018%2F03%2F23%2FUEFI%25E5%2590%25AF%25E5%258A%25A8%25E6%25A8%25A1%25E5%25BC%258F%25E7%259A%2584%25E7%2594%25B5%25E8%2584%2591%25E5%25AE%2589%25E8%25A3%2585Win10%25E5%2592%258CUbuntu%25E5%258F%258C%25E7%25B3%25BB%25E7%25BB%259F%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://xdong.me/2018/03/23/UEFI%E5%90%AF%E5%8A%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%94%B5%E8%84%91%E5%AE%89%E8%A3%85Win10%E5%92%8CUbuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
