@@ -45,13 +45,13 @@
 
   <!-- jquery3.3.1 -->
   
-    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
   
 
   <!-- fancybox -->
   
-    <link href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" rel="stylesheet">
-    <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
   
   
 <script src="/js/fancybox.js"></script>
@@ -122,7 +122,7 @@
   <!-- LaTex Display -->
 
   
-    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
   
   <script>
     MathJax = {
@@ -139,7 +139,7 @@
   <!-- clipboard -->
 
   
-    <script async type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js"></script>
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
   
   
 <script src="/js/codeCopy.js"></script>
@@ -260,6 +260,31 @@
 
 
 
+
+  
+    <script async type="text/javascript" src="/plugins/valine.min.js" onload="loadValineSuc(this)"></script>
+  
+
+  <div id="vcomments"></div>
+
+  <script>
+    function loadValineSuc() {
+      new Valine({
+        el: '#vcomments',
+        appId: 'RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz',
+        appKey: 'KtRzDQXGq2QeUhmTz7VXMwy9',
+        placeholder: 'Welcome!',
+        avatar: 'robohash',
+        lang: 'zh-CN'
+      })
+    }
+  </script>
+
+    <style>
+      .comments-container .v .vempty {
+        display: none!important;
+      }
+    </style>
 
 
 
