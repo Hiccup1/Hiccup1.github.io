@@ -6,7 +6,7 @@
   <link href="https://xdong.me/atom.xml" rel="self"/>
   
   <link href="https://xdong.me/"/>
-  <updated>2022-08-18T12:55:30.054Z</updated>
+  <updated>2022-09-07T13:46:53.980Z</updated>
   <id>https://xdong.me/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>高并发编程-2 软中断</title>
+    <link href="https://xdong.me/2022/09/07/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-2%20%E8%BD%AF%E4%B8%AD%E6%96%AD/"/>
+    <id>https://xdong.me/2022/09/07/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-2%20%E8%BD%AF%E4%B8%AD%E6%96%AD/</id>
+    <published>2022-09-06T16:00:00.000Z</published>
+    <updated>2022-09-07T13:46:53.980Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; title=&quot;说明&quot;&gt;&lt;/a&gt;说明&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;这篇文章前面相关内容都是&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="高并发" scheme="https://xdong.me/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    
+    <category term="高并发" scheme="https://xdong.me/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="Linux" scheme="https://xdong.me/tags/Linux/"/>
+    
+    <category term="网络" scheme="https://xdong.me/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
   
   <entry>
     <title>高并发编程-1 Linux系统调优</title>
