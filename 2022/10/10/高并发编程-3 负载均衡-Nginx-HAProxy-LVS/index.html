@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Hiccup" />
+  <meta name="description" content="都是小人物，会点代码就行了" />
+  
+  
+  <title>
+    
+      高并发编程-3 负载均衡-Nginx-HAProxy-LVS 
+      
+      
+      |
+    
+     Hiccup&#39;s Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Hiccup</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">高并发编程-3 负载均衡-Nginx-HAProxy-LVS</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2022-10-10 00:00:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" title="高并发">
+                    <b>#</b> 高并发
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/Linux/" title="Linux">
+                    <b>#</b> Linux
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/%E7%BD%91%E7%BB%9C/" title="网络">
+                    <b>#</b> 网络
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>这篇文章不会过多介绍这几个代理，毕竟在网上可以搜到很多它们的优劣对比和适用场景，只要看几篇文章就可以初步了解。此处更专注于在高并发场景下它们的发挥和配置，而且只针对HTTP和TCP。</p>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><p>Nginx是我最先接触的，也是相对来说最熟悉的，可以用来部署一个静态WEB网站，最多的应该是用来当反向代理，提供负载均衡的服务。<br>Nginx的性能是非常高的，一个普通的服务器部署静态页面单机就可以几万QPS，要想再进一步提高性能，可以参考以下几个方面：</p>
+<h4 id="系统调优"><a href="#系统调优" class="headerlink" title="系统调优"></a>系统调优</h4><p>可以看前面的文章 《<a target="_blank" rel="noopener" href="https://turing.run/2022/08/18/%e9%ab%98%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b-1-linux%e7%b3%bb%e7%bb%9f%e8%b0%83%e4%bc%98/">Linux系统调优</a>》对系统参数做适当调整。</p>
+<h4 id="配置调优"><a href="#配置调优" class="headerlink" title="配置调优"></a>配置调优</h4><p>经过系统调优可以确保系统的高并发，但是对于Nginx来说，还需要修改nginx.conf 主要配置文件里面的参数。</p>
+<ol>
+<li>worker_processes 可以调整工作进程数，工作进程数不是越多越好，当和CPU核数相同时可以充分利用CPU，但是我建议不要这样配置，而是空闲一部分CPU用来保持其他进程的正常使用。 比如8核CPU可以配置6或者4，这样Nginx最多也就占用75%的CPU。</li>
+<li>worker_cpu_affinity 可以调整CPU亲和力，让不同的工作进程绑定到不同的核。这个地方就涉及到系统中断的概念了，参考上一篇《<a target="_blank" rel="noopener" href="https://turing.run/2022/09/07/%e9%ab%98%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b-2-%e8%bd%af%e4%b8%ad%e6%96%ad/">软中断</a>》,可以尝试将工作的CPU绑定到软中断核或者避开软中断，再测试性能，这个比较我没测试过，而HAProxy中是推荐和网卡中断绑定到同一个CPU，不同的核上面。</li>
+<li>event 部分</li>
+</ol>
+<ul>
+<li>worker_connections 单个工作进程可以允许同时建立外部连接的数量，无论这个连接是外部主动建立的，还是内部建立的，这个数量会受到操作系统的最大文件数限制，一个TCP连接就相当于一个文件，如果进行了系统参数调优则直接修改就行，否则要先调整系统参数，这个数量可以调大一些，比如10240,65535之类，具体的数值要经过测试才会合理。</li>
+</ul>
+<ol start="4">
+<li>http 部分</li>
+</ol>
+<ul>
+<li>keepalive_timeout 指定每个 TCP 连接最多可以保持多长时间，可以设置为60,75之类的，不要设置过大的数据，也不能太短，既要避免TCP连接过长时间不释放占用资源，也要避免过快关闭连接导致重新建立连接消耗资源。</li>
+</ul>
+<ol start="5">
+<li>server 部分</li>
+</ol>
+<ul>
+<li>proxy_set_header Connection “”;  这个设置也很重要，作用是将http请求头Connection置空，不会传给真实后端服务器（上游服务器），因为proxy_set_header Connection 默认是’close’,会关闭长连接，也就是说客户端发的请求到了nginx是正常的，但是nginx和真实后端的http通信都是短连接，这个是很耗费性能的，而且由于此时nginx相当于客户端，还会受到端口数限制，高并发情况会产生大量连接，会有很多time_wait状态的TCP链接。proxy_http_version 1.1; 也需要设置。</li>
+</ul>
+<ol start="6">
+<li>upstream 部分</li>
+</ol>
+<ul>
+<li>keepalive 开启与真实后端服务器（上游服务器）之间的连接池, 其数值为每个nginx worker可以保持的最大连接数，默认不设置，这是一个连接池，也是为了保证nginx的长连接，减少资源消耗。<blockquote>
+<p>上面只是写了需要注意的几个参数，还有一些调优的并没有写出来，比如GZIP压缩、缓存配置、fastcgi和限流等等。完整的配置可以随便搜一下，重点关注上面几个，然后再根据测试情况适当调整参数。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="HAProxy"><a href="#HAProxy" class="headerlink" title="HAProxy"></a>HAProxy</h2><p>HAProxy也可以用来做负载均衡，但是不能做WEB server，是多线程模型，而Nginx是多进程的，虽然HA也支持多进程，但我测试发现有的时候多进程性能不如单进程好，而且HA会更多利用CPU内核操作，top命令可以看到内核占用百分比很大，相对Nginx来说性能差不多，可能会稍微好一点，但是不如Nginx模块丰富。</p>
+<h4 id="系统调优-1"><a href="#系统调优-1" class="headerlink" title="系统调优"></a>系统调优</h4><p>参考Nginx提到的系统调优</p>
+<h4 id="配置调优-1"><a href="#配置调优-1" class="headerlink" title="配置调优"></a>配置调优</h4><blockquote>
+<p>我用HAProxy来做四层代理，也就是TCP层，所以配置会少很多，不过用来做负载均衡要注意IP透传之类的，让后端可以拿到真实IP</p>
+</blockquote>
+<ol>
+<li>nbproc 配置进程数，建议配置一下进行测试，搭配cpu亲和绑定，有可能会提高性能，进程不要超过内核数，避免服务器满载。</li>
+<li>cpu-map 绑定进程和CPU内核，可以将进程绑定到网卡中断CPU的不同内核上，再配合性能测试调整</li>
+<li>maxconn 设定每个haproxy进程所接受的最大并发连接数，这个可以调大一些，几十万都可以</li>
+<li>balance 负载均衡方式，可以通过业务情况调整</li>
+</ol>
+<h2 id="LVS"><a href="#LVS" class="headerlink" title="LVS"></a>LVS</h2><p>lvs已经在内核里面了，性能非常高，虽然这三个都支持4层负载均衡，但是LVS是不一样的。LVS支持DR、NAT、隧道、FULLNAT模式。</p>
+<ul>
+<li>DR模式：通过改写请求报文的目标MAC地址，将请求发送给真实服务器，而真实服务器将相应后的处理结果直接返还给客户端用户。极大地提高集群的伸缩性，但LB与RS必须在同一局域网环境。</li>
+<li>NAT模式：通过网络地址转换，LB重写请求报文的目标地址，根据预设的调度算法，将请求分派给后端的真实服务器，真实服务器的响应报文处理之后，返回时必须通过LB，经过LB时报文的源地址被重写，再返回给客户。</li>
+<li>隧道模式：LB把请求的报文通过IP隧道转发至真实服务器，而真实服务器将响应处理后直接返回给客户端用户。</li>
+<li>FULLNAT模式：数据包进入时，除了做DNAT，还做SNAT，从而实现LVS-RealServer间可以跨vlan通讯，RealServer只需要连接到内网。</li>
+</ul>
+<p>从中可以看出除了隧道模式，其他的都是修改数据包中IP、MAC之类的操作，隧道模式是再封装一层，就像VPN一样，这就和Nginx之类有了一个很大区别：<strong>不用建立TCP连接</strong>，也就不用维护TCP，这样就能节省很多资源，继而提升性能。所以LVS性能要高与HAProxy和Nginx，但是LVS也有一些局限性，需要根据具体场景做取舍。</p>
+<p>LVS不需要调优就有很高性能，当然支持网卡多队列，多核处理网卡中断会更好，如果想要有更高的性能，可以去搜一下DPDK。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2022/09/07/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-2%20%E8%BD%AF%E4%B8%AD%E6%96%AD/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2022-10-10 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" title="高并发">
+                        <b>#</b> 高并发
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/Linux/" title="Linux">
+                        <b>#</b> Linux
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/%E7%BD%91%E7%BB%9C/" title="网络">
+                        <b>#</b> 网络
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E4%BC%98"><span class="toc-text">系统调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%B0%83%E4%BC%98"><span class="toc-text">配置调优</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HAProxy"><span class="toc-text">HAProxy</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E8%B0%83%E4%BC%98-1"><span class="toc-text">系统调优</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%B0%83%E4%BC%98-1"><span class="toc-text">配置调优</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVS"><span class="toc-text">LVS</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+  
+    <script async type="text/javascript" src="/plugins/valine.min.js" onload="loadValineSuc(this)"></script>
+  
+
+  <div id="vcomments"></div>
+
+  <script>
+    function loadValineSuc() {
+      new Valine({
+        el: '#vcomments',
+        appId: 'RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz',
+        appKey: 'KtRzDQXGq2QeUhmTz7VXMwy9',
+        placeholder: 'Welcome!',
+        avatar: 'robohash',
+        lang: 'zh-CN'
+      })
+    }
+  </script>
+
+    <style>
+      .comments-container .v .vempty {
+        display: none!important;
+      }
+    </style>
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/Hiccup1">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="mailto:i@xdong.me">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Hiccup</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-3%20%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-Nginx-HAProxy-LVS + '&url=' + https%3A%2F%2Fxdong.me%2F2022%2F10%2F10%2F%25E9%25AB%2598%25E5%25B9%25B6%25E5%258F%2591%25E7%25BC%2596%25E7%25A8%258B-3%2520%25E8%25B4%259F%25E8%25BD%25BD%25E5%259D%2587%25E8%25A1%25A1-Nginx-HAProxy-LVS%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://xdong.me/2022/10/10/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-3%20%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-Nginx-HAProxy-LVS/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
