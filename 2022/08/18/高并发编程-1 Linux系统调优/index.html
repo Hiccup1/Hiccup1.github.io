@@ -205,7 +205,7 @@
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
 <li>上述一些内核参数修改可能会导致产生异常，可以根据具体业务修改特定参数</li>
 <li>比如tcp_timestamps和tcp_tw_recycle都设置为1，可能会导致在nat的网络环境访问服务器时会有不定时连接超时的问题。当多个客户端通过NAT方式联网并与服务端交互时，服务端看到的是同一个IP，这些客户端的时间戳可能存在差异，从服务端的视角看，便可能出现时间戳错乱的现象，进而直接导致时间戳小的数据包被丢弃。如果发生了此类问题，具体的表现通常是是客户端明明发送的SYN，但服务端就是不响应ACK，也就无法建立TCP连接。</li>
-<li>比如tcp_tw_reuse开启TIME_WAIT重用，这个状态是主动发起TCP关闭的一端会出现，而且会持续2MSL时间之后才会回到初始状态，MSL值得是数据包在网络中的最大生存时间，这段时间内这个端口是不能被重用的。正常来说只会影响客户端，服务端不收影响，但是当服务器充当反向代理，比如Nginx、Haproxy之类的就需要发起TCP连接，如果TIME_WAIT过多就无法建立新的连接，所以这些相关参数要适当调整。</li>
+<li>比如tcp_tw_reuse开启TIME_WAIT重用，这个状态是主动发起TCP关闭的一端会出现，而且会持续2MSL时间之后才会回到初始状态，MSL值是数据包在网络中的最大生存时间，这段时间内这个端口是不能被重用的。正常来说只会影响客户端，服务端不收影响，但是当服务器充当反向代理，比如Nginx、Haproxy之类的就需要发起TCP连接，如果TIME_WAIT过多就无法建立新的连接，所以这些相关参数要适当调整。</li>
 <li>还有TCP的keepalive，这个和我们通常了解的HTTP keepalive不是一回事，他是TCP的保活机制，如果两端的TCP连接一直没有数据交互，达到了触发TCP保活机制的条件，那么内核里的 TCP 协议栈就会发送探测报文,而Linux默认的保活时间是 7200 秒（2小时），也就 2 小时内如果没有任何连接相关的活动，则会启动保活机制，还会经过多次探测才会关闭，所以可以修改此参数避免TCP连接占用资源。</li>
 </ol>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>参数调优需谨慎，一不注意有可能会导致一些意想不到的问题，但是要想高并发，这些调优还是有必要的。网络方面的学习很重要，特别是TCP相关的知识更需要深入研究一下，之后再去调参数和项目开发则会事半功倍。</p>
@@ -338,7 +338,7 @@
     
     <div class="footer-more">
       
-        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Hiccup</a>
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2023 Hiccup</a>
         
     </div>
   
