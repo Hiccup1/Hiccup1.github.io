@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Hiccup" />
+  <meta name="description" content="都是小人物，会点代码就行了" />
+  
+  
+  <title>
+    
+      HTTP压力测试教程 
+      
+      
+      |
+    
+     Hiccup&#39;s Blog
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <!--<link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">-->
+
+  <!-- hexo site css -->
+  
+<link rel="stylesheet" href="/css/color-scheme.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css">
+<link rel="stylesheet" href="/css/github-markdown.css">
+<link rel="stylesheet" href="/css/highlight.css">
+<link rel="stylesheet" href="/css/comments.css">
+
+  <!-- 代码块风格 -->
+  
+    
+<link rel="stylesheet" href="/css/figcaption/mac-block.css">
+
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8H67WR8VHC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-8H67WR8VHC');
+    </script>
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/atom.xml" title="Hiccup's Blog" type="application/atom+xml">
+</head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">Hiccup</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">HTTP压力测试教程</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime" title="更新时间"></i>
+          2022-02-05 00:00:00
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags" title="标签"></i>
+                
+                <span class="span--tag">
+                  <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" title="高并发">
+                    <b>#</b> 高并发
+                  </a>
+                </span>
+                
+                <span class="span--tag">
+                  <a href="/tags/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" title="压力测试">
+                    <b>#</b> 压力测试
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>这篇文章主要介绍HTTP压力测试的工具和一些特殊技巧，不会详细写使用方法，而是重点关注wrk这个压测工具，用它来测试多个性能指标。至于服务器端的调优可以参考前面几篇高并发配置文章。</p>
+<h3 id="压测工具介绍"><a href="#压测工具介绍" class="headerlink" title="压测工具介绍"></a>压测工具介绍</h3><ol>
+<li>Apache JMeter：Apache JMeter 是一个开源的 Java 压力测试工具，可以通过图形化界面创建测试计划，并模拟用户请求、并发量等场景进行测试。</li>
+<li>ab：ab（Apache Bench）是一个简单的命令行式压力测试工具，可以模拟多个并发用户对目标 URL 进行请求，并提供基本的统计信息和报告功能。</li>
+<li>vegeta: Vegeta是一个通用的HTTP负载测试工具，它可以用恒定请求速率进行测试。它既可以用作命令行实用程序，也可以用作库。</li>
+<li>wrk: wrk 是一款针对 Http 协议的基准测试工具，它能够在单机多核 CPU 的条件下，使用系统自带的高性能 I/O 机制，如 epoll，kqueue 等，通过多线程和事件模式，对目标机器产生大量的负载。</li>
+</ol>
+<p>还有很多压测工具，但是我只想详细说一下wrk和vegeta。主要推荐使用wrk来测试</p>
+<p><strong>注： 此文章这些工具都是使用Centos7安装部署的</strong></p>
+<h3 id="vegeta"><a href="#vegeta" class="headerlink" title="vegeta"></a>vegeta</h3><p>github地址： <a target="_blank" rel="noopener" href="https://github.com/tsenart/vegeta">https://github.com/tsenart/vegeta</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>vegeta安装非常简单，因为是go语言写的，可以直接下载官方的预编译版本后开箱即用。简单安装使用可以参考这篇文章<a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhangb8042/p/10237161.html%E3%80%82">https://www.cnblogs.com/zhangb8042/p/10237161.html。</a> 此处不详细说</p>
+<h4 id="优势-amp-缺点"><a href="#优势-amp-缺点" class="headerlink" title="优势 &amp; 缺点"></a>优势 &amp; 缺点</h4><p>优势如下：</p>
+<ul>
+<li>vegeta性能很好。单个客户端就能提供很大吞吐量。</li>
+<li>支持多台客户端同时压测。因为单台客户端1个IP就会受到连接数端口限制，最多65535个端口。如果想测试最大并发连接数就需要多个客户端来压测。在github中提到过用pdsh可以实现，具体使用方法可以谷歌/百度一下。</li>
+<li>使用简单。命令行重要的参数不多，很容易掌握，支持多种请求方式。</li>
+<li>支持固定速率压测。</li>
+</ul>
+<p>缺点我个人觉得有2个：</p>
+<ul>
+<li>压测文件可能会很大。如果压测吞吐量很大，而且压测时间很长，vegeta就会生成很大的压测文件，在生成报告时会占用很大时间。特别是多台压测时，几万QPS压测10分钟可能就有几个G的文件大小。</li>
+<li>没办法固定客户端的连接数。就是不支持客户端建立固定数量的TCP连接，这样不好测试最大并发连接数。</li>
+</ul>
+<h3 id="wrk"><a href="#wrk" class="headerlink" title="wrk"></a>wrk</h3><p>wrk github: <a target="_blank" rel="noopener" href="https://github.com/wg/wrk">https://github.com/wg/wrk</a><br>我更推荐使用wrk2，这个在wrk的基础上做了一些增强，可以支持固定吞吐量发压<br>wrk2 github: <a target="_blank" rel="noopener" href="https://github.com/giltene/wrk2">https://github.com/giltene/wrk2</a><br>多客户端wrk github: <a target="_blank" rel="noopener" href="https://github.com/anio/wrk-utils">https://github.com/anio/wrk-utils</a></p>
+<p>第三个地址是利用多客户端压测使用的（集群）,可以配置多个发压客户端，通过一条命令直接启动，测试完结果会显示在控制端。</p>
+<h4 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h4><p>wrk2的使用可以参考github地址，也可以搜索一些使用文章参考。后续的都是使用wrk2进行测试的<br>举个例子：</p>
+<blockquote>
+<p>wrk -t2 -c100 -d30s -R2000 <a target="_blank" rel="noopener" href="http://127.0.0.1:8080/index.html">http://127.0.0.1:8080/index.html</a></p>
+</blockquote>
+<p>这条命令意思是使用2个线程(-t2)，打开100个TCP连接(-c100)，运行30s(-d30s)，压测速度为2000/s (-R2000)，请求接口为<a target="_blank" rel="noopener" href="http://127.0.0.1:8080/index.html">http://127.0.0.1:8080/index.html</a></p>
+<p>在wrk-utils工具中，会有个stats.lua文件，如果会lua语言的话可以在里面修改一些请求代码，比如更改请求方式、请求类型、请求体、请求头等等，wrk可以支持lua语言。</p>
+<h4 id="wkr2-wrk-utils-安装-使用"><a href="#wkr2-wrk-utils-安装-使用" class="headerlink" title="wkr2+wrk-utils 安装+使用"></a>wkr2+wrk-utils 安装+使用</h4><p>当使用wrk-utils时，他自带的wrk不是wrk2，所以需要自己下载编译wrk2为可执行文件。<br>部署wrk2可以参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv9547855/">https://www.bilibili.com/read/cv9547855/</a><br>这篇文章是部署wrk的，但我们要使用wrk2，所以要替换下载wrk2的github文件。</p>
+<p>然后部署wrk-utils很简单，只需要git clone到指定目录就可以，然后将生成的wrk2的可执行文件替换掉原来的wrk文件。多台服务器还需要安装sshpass，要配置免密登录。具体安装部署可以参考<a target="_blank" rel="noopener" href="https://github.com/anio/wrk-utils">https://github.com/anio/wrk-utils</a><br>比较重要的步骤如下：</p>
+<ol>
+<li><p>先确定好发压客户端，并且配置免密登录</p>
+</li>
+<li><p>在wrk-utils目录下新建一个servers.txt文件，写入客户端ip，一个ip一行。或者按教程填写此文件</p>
+</li>
+<li><p>执行命令如下命令启动，注意不要有/之类，直接复制即可</p>
+<blockquote>
+<p>. activate.sh</p>
+</blockquote>
+</li>
+<li><p>执行如下命令初始化</p>
+<blockquote>
+<p>init-servers</p>
+</blockquote>
+</li>
+<li><p>available-node-count 命令可以显示可用的客户端节点数量，kill-all 命令可以停止所有的客户端进程</p>
+</li>
+<li><p>执行压测命令，等待执行完成就会显示测试结果</p>
+</li>
+</ol>
+<p>wrk-utils的命令一般如下所示：</p>
+<blockquote>
+<p>exec-wrk 10 -t10 -c300 -d600s -R2000 -T60s –latency -s stats.lua ‘<a target="_blank" rel="noopener" href="https://example.com/path/?id=1'">https://example.com/path/?id=1'</a></p>
+</blockquote>
+<p>这些参数都是每台客户端独立执行的</p>
+<ul>
+<li>10 表示下一台机器执行wrk命令的延迟，也就是下一台机器延迟10s执行。因为如果瞬间几十台客户端发压，这个TCP新建连接速度会很大，如果服务器没做配置就会有大量失败。如果是测试吞吐量就应该避免瞬间流量过大，而是要慢慢升高压力。</li>
+<li>-t10 表示客户端10个线程，这个是每台客户端都是10个线程，不是总共的</li>
+<li>-c300 表示客户端建立300个TCP连接，这个也是每台客户端单独的</li>
+<li>-d600s 表示压测600s，也就是10分钟</li>
+<li>-R2000 表示压测速度为每秒2000次请求，wrk2提供</li>
+<li>-T60s 表示超时时间60s</li>
+<li>–latency 表示展现详细的测试结果，wrk2提供</li>
+<li>-s stats.lua 加载lua脚本文件</li>
+<li>‘<a target="_blank" rel="noopener" href="https://example.com/path/?id=1'">https://example.com/path/?id=1'</a>  请求的http接口</li>
+</ul>
+<h4 id="分析压测结果"><a href="#分析压测结果" class="headerlink" title="分析压测结果"></a>分析压测结果</h4><p>测试完成可以看到结果输出，但是不会汇总，他是直接输出每一台客户端的结果，如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Running 10s test @ http://127.0.0.1:8080</span><br><span class="line">  10 threads and 100 connections</span><br><span class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</span><br><span class="line">    Latency     4.75ms    4.07ms  26.19ms   83.06%</span><br><span class="line">    Req/Sec       -nan      -nan   0.00      0.00%</span><br><span class="line">  Latency Distribution (HdrHistogram - Recorded Latency)</span><br><span class="line"> 50.000%    2.86ms</span><br><span class="line"> 75.000%    7.21ms</span><br><span class="line"> 90.000%   10.47ms</span><br><span class="line"> 99.000%   16.48ms</span><br><span class="line"> 99.900%   20.96ms</span><br><span class="line"> 99.990%   26.21ms</span><br><span class="line"> 99.999%   26.21ms</span><br><span class="line">100.000%   26.21ms</span><br></pre></td></tr></tbody></table></figure>
+<p>其中可以关注平均延迟，50%、90%、99%的请求延迟<br>之后会显示更精细的延迟数据，此处不再展示。最后会显示吞吐量等数据，如下所示</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> 1810 requests in 10.00s, 9.40MB read</span><br><span class="line">Requests/sec:    180.95</span><br><span class="line">Transfer/sec:      0.94MB</span><br><span class="line">192.168.10.1 Done!</span><br></pre></td></tr></tbody></table></figure>
+<p>这就表示总共有1810个请求，压测10s，请求180.95次每秒，吞吐量 0.94MB每秒<br>此处的吞吐量是服务器实际的吞吐量，比如你压测1000次每秒，可能服务器只能做到200次每秒。</p>
+<p>如果有异常，还可能会显示TCP socket的异常，如下所示</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Socket errors: connect 1016, read 1968, write 33, timeout 1160</span><br></pre></td></tr></tbody></table></figure>
+<p>如果是测试http，对于这些输出可以不用太关注，但是如果输出包含如下内容，则表示出现了异常响应，就需要注意判断请求异常</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Non-2xx or 3xx Responses: 20345</span><br></pre></td></tr></tbody></table></figure>
+<p>这个就表示出现了非200 和3xx 响应的请求数量。都知道200是表示请求成功，3开头的一般是重定向。所以这种就表示出现了异常，可以查看日志，判断响应码，然后再解决问题。查看日志可以到具体的客户端wrk-utils目录下查看wrk-done.log 文件，此文件会显示具体的返回响应码。</p>
+<h4 id="性能指标"><a href="#性能指标" class="headerlink" title="性能指标"></a>性能指标</h4><ol>
+<li>吞吐量：吞吐量意味这台设备在每一秒以内所能够处理的最大流量或者说每一秒内能处理的数据包个数，或者说QPS、TPS之类。如果用带宽计量，单位是Mbps(Megabits per second)或者Gbps(Gigabits per second)<br>吞吐量测试是最简单的，连接数不用太大，每台几百个就可以，慢慢提高压测速率，注意延迟，直到测试出极限，压测时间也要慢慢提高。</li>
+<li>时延： 时延是系统处理请求所需要的时间。在一个网络中，如果我们访问某一台服务器，一般经过大量的路由交换设备，在路上就要耗费很多时间，所以服务处理请求的时间也很重要。我们压测一般都是内网压测，所以延迟基本就是服务器处理时间，所以这个数值越低越好。<br>延迟不用单独测试，压测结果会包含延迟，重点关注平均延迟、50%请求的延迟、90%、99%、100%的延迟，可以看出整体状态。</li>
+<li>新建连接速率： 新建连接速率指的是在每一秒以内服务器所能够处理的HTTP新建连连接请求的数量。用户每打开一个网页，访问一个服务器，在服务器看来会是1个甚至多个新建连接。而新建连接速率越高，就可以同时给更多的用户提供网络访问。比如设备的新建连接速率是1万，每人只会新建一个TCP连接，那么如果有1万人同时上网，那么所有的请求都可以在一秒以内完成，如果有1万1千人上网的话，那么前1万人可以在第一秒内完成，后1千个请求需要在下一秒才能完成。所以，新建连接速率高的服务器可以提供给更多人同时上网，提升用户的网络体验。<br>新建连接速率要用特殊方法测试，因为普通测试对于HTTP1.1来说，建立了TCP连接之后就不会断开了，后续的请求都是用的同一个TCP连接，所以这样没办法测出新建连接速率。所以我们测试的时候要改请求头，将Connection 设置为close，这样客户端每次请求都会新建TCP连接。在wrk-utils中测试可以编辑stats.lua文件，增加如下代码即可<blockquote>
+<p>wrk.headers[“Connection”] = “close”</p>
+</blockquote>
+</li>
+</ol>
+<p>服务器端可以用特定监控工具，如果是centos7也可以用以下命令查看:</p>
+<blockquote>
+<p>sar -n TCP,ETCP 1</p>
+</blockquote>
+<p>每秒都会输出TCP相关数据，其中passive_opens时每秒钟创建的被动套接字数量，也就相当于服务器的新建连接数了。因为每一次HTTP请求新建一个TCP连接，所以可以直接使用这个值</p>
+<ol start="4">
+<li>并发连接数：并发连接数就是指服务最大能够同时处理的连接会话个数。也就时能够维护的连接数的数量，现在普通的网站访问，一个用户一个浏览器一般会打开多个TCP连接，所以服务器这个指标越大，在一段时间内所能够允许同时上网的用户数越多。<br>这个指标测试和新建连接速率差不多，但不同点是TCP连接不断开，而是一直维持不关闭。所以新增的请求头close要去掉，保持默认，wrk通过-T设置超时时间，要加大这个值，而且服务器也要调整超时时间，避免断开TCP连接。<br>对于centos7可以使用ss -s查看当前TCP连接情况，也可以通过监控工具查看。执行ss -s命令输出如下：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Total: 2346 (kernel 2506)</span><br><span class="line">TCP:   944 (estab 575, closed 298, orphaned 0, synrecv 0, timewait 122/0), ports 0</span><br><span class="line">Transport Total     IP        IPv6</span><br><span class="line">*         2506      -         -</span><br><span class="line">RAW       0         0         0</span><br><span class="line">UDP       9         7         2</span><br><span class="line">TCP       646       495       151</span><br><span class="line">INET      655       502       153</span><br><span class="line">FRAG      0         0         0</span><br></pre></td></tr></tbody></table></figure>
+其中TCP 中 estab 575就是当前的TCP已连接数量</li>
+</ol>
+<h4 id="注意要点"><a href="#注意要点" class="headerlink" title="注意要点"></a>注意要点</h4><ol>
+<li>压测服务器一般要进行系统调优，centos默认的参数是没办法支持高并发的，这部分可以参考我之前的文章进行调整。</li>
+<li>测试过程要时刻关注系统资源和负载，查看CPU、内存、磁盘和网络的使用情况，根据资源消耗调整压测参数。比如代理服务器可能会出现CPU过高，其他资源占用很少。有的服务器也可能出现软中断CPU过高，导致吞吐量上不去。有的可能会收到网线及网口限制。</li>
+<li>压测要测出极限，也要测试正常使用状态的性能，避免突发流量导致服务异常。</li>
+<li>一个压测工具可能会由于一些原因数值不准确，也可以使用其他工具进行压测，对比数据</li>
+<li>压测要了解基本的TCP知识，比如握手挥手和TCP状态流转，要明白当前TCP各种状态出现的原因，比如大量TIME_WAIT一般是代理服务器出现，这个就可能导致压测性能上不去。</li>
+<li>压测也要了解基本的HTTP知识，比如请求方式，请求类型，特定的请求头，这种都可能会对测试造成影响。</li>
+<li>后端服务如果有必要可进行优化，比如通过监控进程线程的工具，或者火焰图工具，找到性能异常消耗的地方，进行性能调优</li>
+</ol>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/2020/06/12/Java%E4%B8%ADString%E5%92%8Cbyte-%E8%BD%AC%E6%8D%A2%E9%95%BF%E5%BA%A6%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime" title="更新时间"></i>
+              2022-02-05 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags" title="标签"></i>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/" title="高并发">
+                        <b>#</b> 高并发
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag">
+                      <a href="/tags/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" title="压力测试">
+                        <b>#</b> 压力测试
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/2022/08/18/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B-1%20Linux%E7%B3%BB%E7%BB%9F%E8%B0%83%E4%BC%98/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7%E4%BB%8B%E7%BB%8D"><span class="toc-text">压测工具介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vegeta"><span class="toc-text">vegeta</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF-amp-%E7%BC%BA%E7%82%B9"><span class="toc-text">优势 &amp; 缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wrk"><span class="toc-text">wrk</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D"><span class="toc-text">简单介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#wkr2-wrk-utils-%E5%AE%89%E8%A3%85-%E4%BD%BF%E7%94%A8"><span class="toc-text">wkr2+wrk-utils 安装+使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E5%8E%8B%E6%B5%8B%E7%BB%93%E6%9E%9C"><span class="toc-text">分析压测结果</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">性能指标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E8%A6%81%E7%82%B9"><span class="toc-text">注意要点</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+  
+    <script async type="text/javascript" src="/plugins/valine.min.js" onload="loadValineSuc(this)"></script>
+  
+
+  <div id="vcomments"></div>
+
+  <script>
+    function loadValineSuc() {
+      new Valine({
+        el: '#vcomments',
+        appId: 'RTMQ7x9WHWk4fBUGNwJfijir-gzGzoHsz',
+        appKey: 'KtRzDQXGq2QeUhmTz7VXMwy9',
+        placeholder: 'Welcome!',
+        avatar: 'robohash',
+        lang: 'zh-CN'
+      })
+    }
+  </script>
+
+    <style>
+      .comments-container .v .vempty {
+        display: none!important;
+      }
+    </style>
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/Hiccup1">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+        <li>
+          <a title="email" href="mailto:i@xdong.me">
+            <i class="iconfont icon-envelope"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2023 Hiccup</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B + '&url=' + https%3A%2F%2Fxdong.me%2F2022%2F02%2F05%2FHTTP%25E5%258E%258B%25E5%258A%259B%25E6%25B5%258B%25E8%25AF%2595%25E6%2595%2599%25E7%25A8%258B%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://xdong.me/2022/02/05/HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
