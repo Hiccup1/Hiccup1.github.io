@@ -45,6 +45,34 @@
   </entry>
   
   <entry>
+    <title>HTTP压力测试教程</title>
+    <link href="https://xdong.me/2023/02/05/HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B/"/>
+    <id>https://xdong.me/2023/02/05/HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B/</id>
+    <published>2023-02-04T16:00:00.000Z</published>
+    <updated>2023-04-05T14:02:12.974Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;这篇文章主要介绍HTTP压力测试的工具和一些特殊技巧，不会详细写使用方法，而是重点关注wrk这个压测工具，用它来测试多个性能指标。至于服务器端的调优可以参考前面几篇高并发配置文章。&lt;/p&gt;
+&lt;h3 id=&quot;压测工具介绍&quot;&gt;&lt;a href=&quot;#压测工具介绍&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="压力测试" scheme="https://xdong.me/categories/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/"/>
+    
+    
+    <category term="高并发" scheme="https://xdong.me/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="压力测试" scheme="https://xdong.me/tags/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>MySQL5.7 insert on duplicate key update 多线程死锁</title>
     <link href="https://xdong.me/2022/11/18/MySQL5.7%20insert%20on%20duplicate%20key%20update%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81/"/>
     <id>https://xdong.me/2022/11/18/MySQL5.7%20insert%20on%20duplicate%20key%20update%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81/</id>
@@ -154,34 +182,6 @@
     <category term="高并发" scheme="https://xdong.me/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
     
     <category term="Linux" scheme="https://xdong.me/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HTTP压力测试教程</title>
-    <link href="https://xdong.me/2022/02/05/HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B/"/>
-    <id>https://xdong.me/2022/02/05/HTTP%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E6%95%99%E7%A8%8B/</id>
-    <published>2022-02-04T16:00:00.000Z</published>
-    <updated>2023-04-05T13:55:39.169Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;这篇文章主要介绍HTTP压力测试的工具和一些特殊技巧，不会详细写使用方法，而是重点关注wrk这个压测工具，用它来测试多个性能指标。至于服务器端的调优可以参考前面几篇高并发配置文章。&lt;/p&gt;
-&lt;h3 id=&quot;压测工具介绍&quot;&gt;&lt;a href=&quot;#压测工具介绍&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="压力测试" scheme="https://xdong.me/categories/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/"/>
-    
-    
-    <category term="高并发" scheme="https://xdong.me/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="压力测试" scheme="https://xdong.me/tags/%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
