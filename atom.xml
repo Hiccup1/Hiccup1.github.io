@@ -6,7 +6,7 @@
   <link href="https://xdong.me/atom.xml" rel="self"/>
   
   <link href="https://xdong.me/"/>
-  <updated>2023-04-02T09:36:23.844Z</updated>
+  <updated>2023-04-26T12:32:17.409Z</updated>
   <id>https://xdong.me/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>WAF 实现透明部署-原理及操作步骤</title>
+    <link href="https://xdong.me/2023/04/26/WAF%20%E5%AE%9E%E7%8E%B0%E9%80%8F%E6%98%8E%E9%83%A8%E7%BD%B2-%E5%8E%9F%E7%90%86%E5%8F%8A%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4/"/>
+    <id>https://xdong.me/2023/04/26/WAF%20%E5%AE%9E%E7%8E%B0%E9%80%8F%E6%98%8E%E9%83%A8%E7%BD%B2-%E5%8E%9F%E7%90%86%E5%8F%8A%E6%93%8D%E4%BD%9C%E6%AD%A5%E9%AA%A4/</id>
+    <published>2023-04-25T16:00:00.000Z</published>
+    <updated>2023-04-26T12:32:17.409Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;此文章主要参考了一篇文章和FortiWeb Guide文档，原理也是和chatgpt沟通得到的，具体链接放到了最后.&lt;/p&gt;
+&lt;h2</summary>
+        
+      
+    
+    
+    
+    <category term="WAF" scheme="https://xdong.me/categories/WAF/"/>
+    
+    
+    <category term="WAF" scheme="https://xdong.me/tags/WAF/"/>
+    
+    <category term="Centos" scheme="https://xdong.me/tags/Centos/"/>
+    
+  </entry>
   
   <entry>
     <title>正则表达式判断质数-有点意思</title>
