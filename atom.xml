@@ -105,15 +105,14 @@
     <link href="https://xdong.me/2022/11/18/MySQL5.7%20insert%20on%20duplicate%20key%20update%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81/"/>
     <id>https://xdong.me/2022/11/18/MySQL5.7%20insert%20on%20duplicate%20key%20update%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81/</id>
     <published>2022-11-17T16:00:00.000Z</published>
-    <updated>2023-01-14T14:12:35.336Z</updated>
+    <updated>2024-11-20T10:01:58.341Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;这篇文章不会过多介绍这几个代理，毕竟在网上可以搜到很多它们的优劣对比和适用场景，只要看几篇文章就可以初步了解。此处更专注于在高并发场景下它们的发挥和配置，而且只针对HTTP和TCP。&lt;/p&gt;
-&lt;h2 id=&quot;Nginx&quot;&gt;&lt;a href=&quot;#Nginx&quot;</summary>
+    <summary type="html">&lt;p&gt;insert on duplicate key update 当发现有重复的唯一索引(unique key)或者主键(primary</summary>
         
       
     
@@ -269,7 +268,7 @@
     <link href="https://xdong.me/2018/09/18/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/"/>
     <id>https://xdong.me/2018/09/18/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</id>
     <published>2018-09-18T14:04:38.000Z</published>
-    <updated>2022-08-09T13:30:56.437Z</updated>
+    <updated>2023-05-14T03:18:15.501Z</updated>
     
     
       
