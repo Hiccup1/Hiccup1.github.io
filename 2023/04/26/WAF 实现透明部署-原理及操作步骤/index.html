@@ -262,14 +262,14 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcpdump -n -X -i enp2s0 -w client.pcap</span><br><span class="line">tcpdump -n -X -i br0 -w waf.pcap</span><br><span class="line">tcpdump -n -X -i enp2s0 -w server.pcap</span><br></pre></td></tr></tbody></table></figure>
 <p>然后用客户端浏览器发送请求，等响应正常后可以ctrl+c停止抓包，将抓包文件导出到windows中，利用wireshark研究数据</p>
 <h3 id="客户端数据"><a href="#客户端数据" class="headerlink" title="客户端数据"></a>客户端数据</h3><ol>
-<li>红圈中的这条数据就是ARP协议数据，ARP是通过IP地址找MAC地址的，这条数据是客户端(172.16.0.1)发送一个 ARP Announcement 消息到局域网中，以通知其他主机更新自己的 ARP 缓存表， 客户端发送给ff:ff:ff:ff:ff:ff 是广播地址，用于将数据包发送到网络中的所有主机。参数就是自己的mac地址(40:8d:5c:d7:49:ed)<br><img src="https://turing.run/wp-content/uploads/2023/04/2023042609312333.png" alt="桥接-客户端-arp"></li>
-<li>这条数据也是arp协议数据，是客户端(172.16.0.1)询问WEB服务器(172.16.0.3)的mac地址，然后收到了回复。可以看到客户端也是发送到广播地址，然后收到了WEB服务器的mac地址（40:8d:5c:f2:aa:6f）<br><img src="https://turing.run/wp-content/uploads/2023/04/2023042609501886.png"></li>
-<li>客户端和WEB服务器的http通信，直接看图, 展示了3次握手和http通信数据，HTTP 状态码 304 Not Modified 表示客户端发送的请求的资源没有发生修改，因为我前面请求了几次，所以服务器没有返回资源的内容，而是返回一个空的响应体，告诉客户端可以使用缓存中的资源。<br><img src="https://turing.run/wp-content/uploads/2023/04/2023042609573686.png"></li>
+<li>红圈中的这条数据就是ARP协议数据，ARP是通过IP地址找MAC地址的，这条数据是客户端(172.16.0.1)发送一个 ARP Announcement 消息到局域网中，以通知其他主机更新自己的 ARP 缓存表， 客户端发送给ff:ff:ff:ff:ff:ff 是广播地址，用于将数据包发送到网络中的所有主机。参数就是自己的mac地址(40:8d:5c:d7:49:ed)<br><img src="https://s2.loli.net/2024/12/07/l6SjhpMZsR5uWTU.png" alt="桥接-客户端-arp"></li>
+<li>这条数据也是arp协议数据，是客户端(172.16.0.1)询问WEB服务器(172.16.0.3)的mac地址，然后收到了回复。可以看到客户端也是发送到广播地址，然后收到了WEB服务器的mac地址（40:8d:5c:f2:aa:6f）<br><img src="https://s2.loli.net/2024/12/07/EDQgnTdzYOwCpmB.png"></li>
+<li>客户端和WEB服务器的http通信，直接看图, 展示了3次握手和http通信数据，HTTP 状态码 304 Not Modified 表示客户端发送的请求的资源没有发生修改，因为我前面请求了几次，所以服务器没有返回资源的内容，而是返回一个空的响应体，告诉客户端可以使用缓存中的资源。<br><img src="https://s2.loli.net/2024/12/07/orj7tucLSx5wVlN.png"></li>
 </ol>
 <blockquote>
 <p>从上面图可以看到客户端(172.16.0.1)一直和WEB服务器（172.16.0.3）通信，并没有感受到WAF的存在。</p>
 </blockquote>
-<h3 id="WEB服务器数据"><a href="#WEB服务器数据" class="headerlink" title="WEB服务器数据"></a>WEB服务器数据</h3><p>先看WEB服务器数据，因为WAF的稍微有点绕，可以先理解WEB服务器通信，如下图所示<br><img src="https://turing.run/wp-content/uploads/2023/04/2023042610043388.png"></p>
+<h3 id="WEB服务器数据"><a href="#WEB服务器数据" class="headerlink" title="WEB服务器数据"></a>WEB服务器数据</h3><p>先看WEB服务器数据，因为WAF的稍微有点绕，可以先理解WEB服务器通信，如下图所示<br><img src="https://s2.loli.net/2024/12/07/tUyXvnVhBmNuFkP.png"></p>
 <ol>
 <li>ARP相关的和客户端一样，都是广播自己的mac，然后收到了客户端(172.16.0.1)询问WEB服务器(172.16.0.3)的mac地址，然后返回自己的mac</li>
 <li>可以看到3次握手，和http请求响应数据</li>
@@ -278,7 +278,7 @@
 <blockquote>
 <p>这个就看出问题了，WEB服务器不是和客户端直接通信的，因为看他的ip地址是 172.16.0.2:31515和172.16.0.3:80 通信，这个是WAF和WEB服务器通信的。在客户端我们看到的截图是172.16.0.1:50635和172.16.0.3:80通信的。<br>还有就是多了四次挥手，客户端并没有看到。<br>这2个不同点就说明中间是有WAF劫持了流量，而且WAF后续和WEB服务器进行了通信</p>
 </blockquote>
-<h3 id="WAF数据"><a href="#WAF数据" class="headerlink" title="WAF数据"></a>WAF数据</h3><p><img src="https://turing.run/wp-content/uploads/2023/04/2023042610171029.png"></p>
+<h3 id="WAF数据"><a href="#WAF数据" class="headerlink" title="WAF数据"></a>WAF数据</h3><p><img src="https://s2.loli.net/2024/12/07/K4ya7xOeoSEFzPp.png"></p>
 <ol>
 <li>可以看到ARP协议数据，不再多说，和上面一样</li>
 <li>三次握手有2部分，这个就特殊了，先解释为什么会有2个TCP三次握手，因为iptables做了DNAT也就是改了数据包的目标IP地址，上面那条iptables命令检测到发往WEB服务器172.16.0.3:80 的数据，就会将目标IP和端口改为172.16.0.2:8080。这也就是可以看到第一次握手是客户端发给WAF的，因为被iptables改了，这就相当于客户端和WAF做了TCP连接。又因为WAF做的桥接，对客户端是透明的，所以syn+ack显示的是172.16.0.3和172.16.0.1。</li>
